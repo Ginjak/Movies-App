@@ -27,24 +27,66 @@ API - v7NMMpYkjMpqpGFtYZymGBQiWFEMTMEb
 //   "https://www.googleapis.com/youtube/v3/search?part=snippet&q=TheMatrixtrailer&type=video&key=AIzaSyAh-n-mfDEgD7pppdEFT1Mc8gflKClHvjw";
 
 // OMDB query var querUrl = "http://www.omdbapi.com/?apikey=d3150aaf&t=The+matrix";
-var querUrl = "http://www.omdbapi.com/?apikey=d3150aaf&t=The+matrix";
-fetch(querUrl)
-  .then((resp) => {
-    return resp.json();
-  })
-  .then((data) => {
-    // Title - console.log(data.Title);
-    // Release yearconsole.log(data.Year);
-    // Runtime in minutes console.log(data.Runtime);
-    // Age rating console.log(data.Rated);
-    // ImdbRating console.log(data.imdbRating);
-    // Movie genreconsole.log(data.Genre);
-    // Movie plot console.log(data.Plot);
-    //Boxoffice new console.log(data.BoxOffice)
-    // Movie directors console.log(data.Director);
-    // Movie Actors console.log(data.Actors);
-    // Writers console.log(data.Writer);
-    // Poster image url console.log(data.Poster);
 
-    console.log(data);
-  });
+var searchInput = $("#search-input");
+var searchBtn = $("#search-btn");
+var movieSortTitle = $("#movie-sort-title");
+var movieSortOptions = $("#movie-sort-options");
+var movieCards = $("#movie-cards");
+
+var movieInfo = $("#movie-info");
+
+/* -----------------------
+        Functions
+   ----------------------- */
+var fetchMovieByTitle = (title) => {
+  var querUrl = `http://www.omdbapi.com/?apikey=d3150aaf&t=${title}`;
+
+  fetch(querUrl)
+    .then((resp) => {
+      return resp.json();
+    })
+    .then((data) => {
+      // Title - console.log(data.Title);
+      // Release yearconsole.log(data.Year);
+      // Runtime in minutes console.log(data.Runtime);
+      // Age rating console.log(data.Rated);
+      // ImdbRating console.log(data.imdbRating);
+      console.log(data.Genre);
+      // Movie plot console.log(data.Plot);
+      //Boxoffice new console.log(data.BoxOffice)
+      // Movie directors console.log(data.Director);
+      // Movie Actors console.log(data.Actors);
+      // Writers console.log(data.Writer);
+      // Poster image url console.log(data.Poster);
+      movieInfo.empty();
+
+      var movieTitle = $(`<h2>${data.Title}</h2>`);
+      var movieMeta = $(
+        `<ul><li>${data.Year}</li><li>${data.Rated}</li><li>${data.Runtime}</li></ul>`
+      );
+      var moviePoster = $(`<img src="${data.Poster}" alt="Movie poster">`);
+      // Movie genres array
+      var movieGenresArr = data.Genre.split(", ");
+
+      movieInfo.append(movieTitle, movieMeta, moviePoster);
+      // Movie genres array, create buttons and append to movieInfo section
+      movieGenresArr.forEach((genre) => {
+        var genreBtn = $(`<button>${genre}</button>`);
+        movieInfo.append(genreBtn);
+      });
+      var moviePlot = $(`<p>${data.Plot}</p>`);
+      var movieDirector = $(`<p>Director(s): ${data.Director}</p>`);
+      var movieWriters = $(`<p>Writer(s): ${data.Writer}</p>`);
+      var movieActors = $(`<p>Actor(s): ${data.Actors}</p>`);
+      movieInfo.append(moviePlot, movieDirector, movieWriters, movieActors);
+      console.log(data);
+    });
+};
+
+// On Search button click fetch data about movies from OMDB
+searchBtn.on("click", function () {
+  if (searchInput.val() !== "") {
+    fetchMovieByTitle(searchInput.val());
+  }
+});
