@@ -8,6 +8,10 @@ Youtube link to show video, need to add id of a video https://www.youtube.com/wa
 var querUrl =
   "https://www.googleapis.com/youtube/v3/search?part=snippet&q=Matrixtrailer&type=video&key=AIzaSyAh-n-mfDEgD7pppdEFT1Mc8gflKClHvjw";
 
+//Video ID console.log(data.items[0].id.videoId);
+
+
+
 New York times url: https://developer.nytimes.com/
 Query to look for movie reviews:
 section_name:"Movies" AND type_of_material:"Review"
@@ -19,17 +23,16 @@ var querUrl =
 API - v7NMMpYkjMpqpGFtYZymGBQiWFEMTMEb
 */
 
-var querUrl =
-  "https://www.googleapis.com/youtube/v3/search?part=snippet&q=Matrixtrailer&type=video&key=AIzaSyAh-n-mfDEgD7pppdEFT1Mc8gflKClHvjw";
+// var querUrl =
+//   "https://www.googleapis.com/youtube/v3/search?part=snippet&q=TheMatrixtrailer&type=video&key=AIzaSyAh-n-mfDEgD7pppdEFT1Mc8gflKClHvjw";
 
 // OMDB query var querUrl = "http://www.omdbapi.com/?apikey=d3150aaf&t=The+matrix";
-
+var querUrl = "http://www.omdbapi.com/?apikey=d3150aaf&t=The+matrix";
 fetch(querUrl)
   .then((resp) => {
     return resp.json();
   })
   .then((data) => {
-    console.log(data);
     // Title - console.log(data.Title);
     // Release yearconsole.log(data.Year);
     // Runtime in minutes console.log(data.Runtime);
@@ -42,4 +45,6 @@ fetch(querUrl)
     // Movie Actors console.log(data.Actors);
     // Writers console.log(data.Writer);
     // Poster image url console.log(data.Poster);
+
+    console.log(data);
   });
