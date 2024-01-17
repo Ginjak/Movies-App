@@ -42,14 +42,14 @@
         </div>
         <div class="row">
           <div class="col">
-            <h1>Tile of a page</h1>
+            <h1>Title of a page</h1>
             <p>Subtitle with some text</p>
           </div>
         </div>
         <div class="row">
-          <div class="col d-flex">
+          <div class="col d-flex" id="diverse-selector">
             <h3>Popular movies</h3>
-            <select class="form-select" aria-label="Default select example">
+            <select class="form-select" aria-label="Default select example"  style="border: 1px, solid; border-radius: 10px;">
               <option selected>Open this select menu</option>
               <option value="1">One</option>
               <option value="2">Two</option>
@@ -57,9 +57,9 @@
             </select>
           </div>
         </div>
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-          <div class="col">
-            <div class="card mb-3" style="max-width: 540px">
+        <div class="row row-cols-1 row-cols-md-4 g-4">
+          <div class="col" id="movies-thumb-cards" style="border: 1px, solid; border-radius: 10px;">
+            <div class="card mb-3" style="max-width: 240px">
               <div class="row g-0">
                 <div class="col-md-4">
                   <img src="..." class="img-fluid rounded-start" alt="..." />
@@ -77,21 +77,17 @@
             </div>
           </div>
           <div class="col">
-            <div class="card mb-3" style="max-width: 540px">
+            <div class="card mb-3" style="max-width: 240px">
               <div class="row g-0">
                 <div class="col-md-4">
                   <img src="..." class="img-fluid rounded-start" alt="..." />
                 </div>
                 <div class="col-md-8">
                   <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
+                    <h5 class="card-title">Movie title</h5>
+                    <p class="card-text">Movie rating</p>
                     <p class="card-text">
-                      This is a wider card with supporting text below as a
-                      natural lead-in to additional content. This content is a
-                      little bit longer.
-                    </p>
-                    <p class="card-text">
-                      <small class="text-muted">Last updated 3 mins ago</small>
+                      <small class="text-muted">Year</small>
                     </p>
                   </div>
                 </div>
@@ -99,25 +95,22 @@
             </div>
           </div>
           <div class="col">
-            <div class="card mb-3" style="max-width: 540px">
+            <div class="card mb-3" style="max-width: 240px">
               <div class="row g-0">
                 <div class="col-md-4">
                   <img src="..." class="img-fluid rounded-start" alt="..." />
                 </div>
                 <div class="col-md-8">
                   <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
+                    <h5 class="card-title">Movie title</h5>
+                    <p class="card-text">Movie rating</p>
                     <p class="card-text">
-                      This is a wider card with supporting text below as a
-                      natural lead-in to additional content. This content is a
-                      little bit longer.
-                    </p>
-                    <p class="card-text">
-                      <small class="text-muted">Last updated 3 mins ago</small>
+                      <small class="text-muted">Year</small>
                     </p>
                   </div>
                 </div>
               </div>
+            </div>
             </div>
           </div>
         </div>
