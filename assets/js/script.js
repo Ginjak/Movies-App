@@ -10,7 +10,22 @@ var querUrl =
 
 //Video ID console.log(data.items[0].id.videoId);
 
+var apiUrl = 'http://www.omdbapi.com/?apikey=15c4e76b&';
 
+fetch(apiUrl)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();  // Parse JSON response
+  })
+  .then(data => {
+    console.log('Fetched data:', data);
+    // Use the fetched data here
+  })
+  .catch(error => {
+    console.error('Error fetching data:', error);
+  });
 
 New York times url: https://developer.nytimes.com/
 Query to look for movie reviews:
