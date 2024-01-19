@@ -2,31 +2,7 @@
 query url: http://www.omdbapi.com/?apikey=[yourkey]&
 OMDB query var querUrl = "http://www.omdbapi.com/?apikey=d3150aaf&t=The+matrix";
 OMDB API - d3150aaf
-
-Youtube API - AIzaSyAh-n-mfDEgD7pppdEFT1Mc8gflKClHvjw
-Youtube link to show video, need to add id of a video https://www.youtube.com/watch?v=
-var querUrl =
-  "https://www.googleapis.com/youtube/v3/search?part=snippet&q=Matrixtrailer&type=video&key=AIzaSyAh-n-mfDEgD7pppdEFT1Mc8gflKClHvjw";
-
-//Video ID console.log(data.items[0].id.videoId);
-
-
-
-New York times url: https://developer.nytimes.com/
-Query to look for movie reviews:
-section_name:"Movies" AND type_of_material:"Review"
-https://api.nytimes.com/svc/search/v2/articlesearch.json?fq=section_name%3A"Movies" AND type_of_material%3A"Review"&sort=newest&page=0&api-key{your-key}
-var querUrl =
-"https://api.nytimes.com/svc/search/v2/articlesearch.json?q=The%20Matrix&fq=section_name:Movies&type_of_material:Review&sort=newest&page=0&api-key=v7NMMpYkjMpqpGFtYZymGBQiWFEMTMEb";
-
-
-API - v7NMMpYkjMpqpGFtYZymGBQiWFEMTMEb
 */
-
-// var querUrl =
-//   "https://www.googleapis.com/youtube/v3/search?part=snippet&q=TheMatrixtrailer&type=video&key=AIzaSyAh-n-mfDEgD7pppdEFT1Mc8gflKClHvjw";
-
-// OMDB query var querUrl = "http://www.omdbapi.com/?apikey=d3150aaf&t=The+matrix";
 
 var searchInput = $("#search-input");
 var searchBtn = $("#search-btn");
@@ -47,18 +23,6 @@ var fetchMovieByTitle = (title) => {
       return resp.json();
     })
     .then((data) => {
-      // Title - console.log(data.Title);
-      // Release yearconsole.log(data.Year);
-      // Runtime in minutes console.log(data.Runtime);
-      // Age rating console.log(data.Rated);
-      // ImdbRating console.log(data.imdbRating);
-      console.log(data.Genre);
-      // Movie plot console.log(data.Plot);
-      //Boxoffice new console.log(data.BoxOffice)
-      // Movie directors console.log(data.Director);
-      // Movie Actors console.log(data.Actors);
-      // Writers console.log(data.Writer);
-      // Poster image url console.log(data.Poster);
       movieInfo.empty();
 
       var movieTitle = $(`<h2>${data.Title}</h2>`);
@@ -100,7 +64,7 @@ function createMovieCards(data) {
           <div class="col-md-8 col-sm-8">
             <div class="card-body">
               <h5 class="card-title">${data.results[i].title}</h5>
-              <p class="card-text"><i class="fa-solid fa-star"></i>${data.results[i].vote_average}</p>
+              <p id="rating" class="card-text"><i class="fa-solid fa-star"></i>${data.results[i].vote_average}</p>
               <p class="card-text">
                 <small class="text-muted">${data.results[i].release_date}</small>
               </p>
@@ -150,6 +114,7 @@ function fetchMovies() {
         apiKey +
         "&primary_release_date.gte=2024-01-19"
     );
+
     movieSortTitle.text("Upcoming Releases");
   }
 }
@@ -164,3 +129,96 @@ searchBtn.on("click", function () {
 movieSortOptions.on("change", function () {
   fetchMovies();
 });
+
+/* ---------------
+Tomaz code
+---------------- */
+
+// Initial References
+let movieNameRef = document.getElementById("search-input");
+let searchButton = document.getElementById("search-btn");
+let result = document.getElementById("movie-details");
+
+// Add your YouTube Data API key here
+const youtubeKey = "AIzaSyAh-n-mfDEgD7pppdEFT1Mc8gflKClHvjw";
+
+// Function to fetch YouTube videos related to the movie
+let getYoutubeVideos = (movieName) => {
+  return new Promise((resolve, reject) => {
+    let url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${movieName} trailer&key=${youtubeKey}`;
+
+    fetch(url)
+      .then((resp) => resp.json())
+      .then((data) => {
+        // If videos exist
+        if (data.items.length > 0) {
+          const videoUrl = `https://www.youtube.com/embed/${data.items[0].id.videoId}`;
+          resolve(videoUrl);
+        } else {
+          reject("No videos found");
+        }
+      })
+      .catch(() => {
+        reject("Error Occurred While Fetching YouTube Videos");
+      });
+  });
+};
+
+// Function to fetch data from API
+const key = "2bd71b72";
+let getMovie = () => {
+  let movieName = movieNameRef.value;
+  let url = `http://www.omdbapi.com/?t=${movieName}&apikey=${key}`;
+  // If input field is empty
+
+  fetch(url)
+    .then((resp) => resp.json())
+    .then((data) => {
+      // If movie exists in database
+      if (data.Response == "True") {
+        result.innerHTML = `
+            <div class="info">
+
+                <img src=${data.Poster} class="poster">
+                <div id="youtube-trailer">
+                </div>
+                <div>
+                    <h2>${data.Title}</h2>
+                    <div class="rating">
+                    <span style="font-size:300%;color:yellow;">&starf;</span>
+                        <h4>${data.imdbRating}</h4>
+                    </div>
+                    <div class="details">
+                        <span>${data.Rated}</span>
+                        <span>${data.Year}</span>
+                        <span>${data.Runtime}</span>
+                        
+                    </div>
+                    <div class="genre">
+                        <div>${data.Genre.split(",").join("</div><div>")}</div>
+                        
+                    </div>
+                </div>
+            </div>
+            <h3>Plot:</h3>
+            <p>${data.Plot}</p>
+            <h3>Cast:</h3>
+            <p>${data.Actors}</p>
+          `;
+        getYoutubeVideos(movieName)
+          .then((videoUrl) => {
+            // Append the YouTube video URL to the 'test' paragraph
+            $("#youtube-trailer").append(`
+            <iframe width="560" height="315" src="${videoUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            
+      `);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+    });
+};
+
+searchButton.addEventListener("click", getMovie);
+window.addEventListener("load", getMovie);
