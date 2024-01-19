@@ -4,7 +4,7 @@
   box-sizing: border-box;
 }
 body {
-  margin 30px;
+  margin: 30px;
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   background-image: -moz-radial-gradient();
 }
@@ -32,7 +32,7 @@ h3 {
 }
 
 
-/ *responsive part */
+/*responsive part */
 @media screen and (max-width: 960px) {
 #movies-thumb-cards {
   display: inline;
@@ -41,7 +41,7 @@ h3 {
   align-items: center;
 }  
 }
-@media screen (max-width: 767px) {
+@media screen and (max-width: 767px) {
   #movies-thumb-card {
   grid-column: auto;
   display: inline;

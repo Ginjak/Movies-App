@@ -80,29 +80,49 @@ function movieReviews(movietitle) {
 					var shortDescription;
 					var criticsName;
 					var reviewDate;
-          var updatedDate;
+					var updatedDate;
 					var UrlforReview;
+					var content;
 					var articles;
 					articles = data.results;
-					console.log(articles);
+					//console.log(articles);
 					for (var i = 0; i < articles.length; i++) {
 						// reviewtitle=articles[i].headline.main;
 						// shortDescription=articles[i].abstract;
 						UrlforReview = articles[i].url;
 						criticsName = articles[i].author;
-            updatedDate = articles[i].updated_at;
-						reviewDate = articles[i].created_at;
-						// console.log("title: "+reviewtitle)
-						console.log("Movie review date: " + reviewDate + " updated: "+updatedDate);
-            console.log("Author: "+criticsName);
-						console.log("weburl: " + UrlforReview);
+						updatedDate = dayjs(articles[i].updated_at).format("DD-MMM-YYYY");
+						reviewDate = dayjs(articles[i].created_at).format("DD-MMM-YYYY");
+						content = articles[i].content;
+						var reviewDiv = $("<div>");
+						var authorHeading = $("<h4>");
+						var reviewDateHeading = $("<h5>");
+						var urltext = $("<a>").attr("href", UrlforReview);
+						var contenttag = $("<p>");
+						authorHeading.text("By: "+criticsName);
+						reviewDateHeading.text("on "+reviewDate + " updated: " + updatedDate);
+						urltext.text(UrlforReview);
+
+						contenttag.text(content);
+						reviewDiv.append(authorHeading);
+						reviewDiv.append(reviewDateHeading);
+						reviewDiv.append(urltext);
+						reviewDiv.append("<br>");
+						reviewDiv.append(content);
+						reviewDiv.append("<hr>");
+						$("#movie-review").append(reviewDiv);
+						// console.log(
+						// 	"Movie review date: " + reviewDate + " updated: " + updatedDate
+						// );
+						// console.log("Author: " + criticsName);
+						// console.log("weburl: " + UrlforReview);
+						// console.log(content);
+						// console.log(reviewDiv);
 					}
 				});
-
-			//console.log(data);
 		});
 }
 var movie = "matrix resurrection".split(" ").join("+");
 
-console.log(movie);
-//movieReviews(movie);
+//console.log(movie);
+movieReviews(movie);
