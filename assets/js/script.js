@@ -32,7 +32,7 @@ var searchInput = $("#search-input");
 var searchBtn = $("#search-btn");
 var movieSortTitle = $("#movie-sort-title");
 var movieSortOptions = $("#movie-sort-options");
-var movieCards = $("#movies-thumb-cards");
+var movieCards = $("#movies");
 
 var movieInfo = $("#movie-info");
 
@@ -90,13 +90,14 @@ function createMovieCards(data) {
   movieCards.empty();
 
   for (var i = 0; i < 8; i++) {
-    var card = $(`<div class="col-3">
-      <div class="card mb-3" style="max-width: 300px">
-        <div class="row g-0">
-          <div class="col-md-4">
+    var card =
+      $(`<div class="col" id="movies-thumb-cards" style="border: 1px, solid; border-radius: 10px;">
+      <div class="card row-cols-1" style="max-width:fit-content;">
+      <div class="row d-flex align-items-center g-0">
+      <div class="col-md-4 h-auto col-sm-4">
             <img src="https://image.tmdb.org/t/p/w200/${data.results[i].poster_path}" class="img-fluid p-2" alt="Movie poster" />
           </div>
-          <div class="col-md-8">
+          <div class="col-md-8 col-sm-8">
             <div class="card-body">
               <h5 class="card-title">${data.results[i].title}</h5>
               <p class="card-text"><i class="fa-solid fa-star"></i>${data.results[i].vote_average}</p>
@@ -149,7 +150,7 @@ function fetchMovies() {
         apiKey +
         "&primary_release_date.gte=2024-01-19"
     );
-    movieSortTitle.text("Future Releases");
+    movieSortTitle.text("Upcoming Releases");
   }
 }
 fetchMovies();
