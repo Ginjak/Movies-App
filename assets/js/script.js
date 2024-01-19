@@ -123,6 +123,12 @@ fetchMovies();
 searchBtn.on("click", function () {
   if (searchInput.val() !== "") {
     fetchMovieByTitle(searchInput.val());
+    $("html, body").animate(
+      {
+        scrollTop: $("#movie-details").offset().top,
+      },
+      200
+    );
   }
 });
 
