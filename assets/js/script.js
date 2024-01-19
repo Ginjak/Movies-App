@@ -32,7 +32,7 @@ var searchInput = $("#search-input");
 var searchBtn = $("#search-btn");
 var movieSortTitle = $("#movie-sort-title");
 var movieSortOptions = $("#movie-sort-options");
-var movieCards = $("#movie-cards");
+var movieCards = $("#movies-thumb-cards");
 
 var movieInfo = $("#movie-info");
 
@@ -84,9 +84,54 @@ var fetchMovieByTitle = (title) => {
     });
 };
 
+// Fetch movies from TMDB by serch criteria
+var fetchMovies = function () {
+  // Top movies
+  queryUrlPopular =
+    "https://api.themoviedb.org/3/discover/movie?api_key=bdc89408c9f3fc4ec6ef3b8781672df0&sort_by=vote_average.desc&vote_count.gte=25000";
+  // Top movies with PG restriction
+  queryUrlPG =
+    "https://api.themoviedb.org/3/discover/movie?api_key=bdc89408c9f3fc4ec6ef3b8781672df0&sort_by=vote_average.desc&vote_count.gte=15000&certification_country=US&certification=PG";
+
+  //Future releases
+  queryUrlNewRelease =
+    "https://api.themoviedb.org/3/discover/movie?api_key=bdc89408c9f3fc4ec6ef3b8781672df0&primary_release_date.gte=2024-01-19";
+  if (movieSortOptions.val() === "1") {
+    fetch(queryUrlPopular)
+      .then((resp) => {
+        return resp.json();
+      })
+      .then((data) => {
+        console.log(data.results);
+      });
+  }
+  if (movieSortOptions.val() === "2") {
+    fetch(queryUrlPG)
+      .then((resp) => {
+        return resp.json();
+      })
+      .then((data) => {
+        console.log(data.results);
+      });
+  }
+  if (movieSortOptions.val() === "3") {
+    fetch(queryUrlNewRelease)
+      .then((resp) => {
+        return resp.json();
+      })
+      .then((data) => {
+        console.log(data.results);
+      });
+  }
+};
+fetchMovies();
 // On Search button click fetch data about movies from OMDB
 searchBtn.on("click", function () {
   if (searchInput.val() !== "") {
     fetchMovieByTitle(searchInput.val());
   }
+});
+
+movieSortOptions.on("change", function () {
+  fetchMovies();
 });
