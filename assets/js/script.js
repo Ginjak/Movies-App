@@ -85,45 +85,73 @@ var fetchMovieByTitle = (title) => {
 };
 
 // Fetch movies from TMDB by serch criteria
-var fetchMovies = function () {
-  // Top movies
-  queryUrlPopular =
-    "https://api.themoviedb.org/3/discover/movie?api_key=bdc89408c9f3fc4ec6ef3b8781672df0&sort_by=vote_average.desc&vote_count.gte=25000";
-  // Top movies with PG restriction
-  queryUrlPG =
-    "https://api.themoviedb.org/3/discover/movie?api_key=bdc89408c9f3fc4ec6ef3b8781672df0&sort_by=vote_average.desc&vote_count.gte=15000&certification_country=US&certification=PG";
+// Function to create movie cards
+function createMovieCards(data) {
+  movieCards.empty();
 
-  //Future releases
-  queryUrlNewRelease =
-    "https://api.themoviedb.org/3/discover/movie?api_key=bdc89408c9f3fc4ec6ef3b8781672df0&primary_release_date.gte=2024-01-19";
+  for (var i = 0; i < 8; i++) {
+    var card = $(`<div class="col-3">
+      <div class="card mb-3" style="max-width: 300px">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="https://image.tmdb.org/t/p/w200/${data.results[i].poster_path}" class="img-fluid p-2" alt="Movie poster" />
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">${data.results[i].title}</h5>
+              <p class="card-text"><i class="fa-solid fa-star"></i>${data.results[i].vote_average}</p>
+              <p class="card-text">
+                <small class="text-muted">${data.results[i].release_date}</small>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`);
+
+    movieCards.append(card);
+  }
+}
+
+// Fetch movies based on selected option
+function fetchMovies() {
+  var apiKey = "bdc89408c9f3fc4ec6ef3b8781672df0";
+  var movieSortOptions = $("#movie-sort-options");
+
+  // Function to fetch movies by url
+  function fetchMoviesByUrl(url) {
+    return fetch(url)
+      .then((resp) => resp.json())
+      .then((data) => createMovieCards(data));
+  }
+  // Most popular movies
   if (movieSortOptions.val() === "1") {
-    fetch(queryUrlPopular)
-      .then((resp) => {
-        return resp.json();
-      })
-      .then((data) => {
-        console.log(data.results);
-      });
+    fetchMoviesByUrl(
+      "https://api.themoviedb.org/3/discover/movie?api_key=" +
+        apiKey +
+        "&sort_by=vote_average.desc&vote_count.gte=25000"
+    );
+    movieSortTitle.text("Most Popular");
   }
+  // Movies for kids with PG certificate
   if (movieSortOptions.val() === "2") {
-    fetch(queryUrlPG)
-      .then((resp) => {
-        return resp.json();
-      })
-      .then((data) => {
-        console.log(data.results);
-      });
+    fetchMoviesByUrl(
+      "https://api.themoviedb.org/3/discover/movie?api_key=" +
+        apiKey +
+        "&sort_by=vote_average.desc&vote_count.gte=15000&certification_country=US&certification=PG"
+    );
+    movieSortTitle.text("Most Popular for kids");
   }
+  // Future releases
   if (movieSortOptions.val() === "3") {
-    fetch(queryUrlNewRelease)
-      .then((resp) => {
-        return resp.json();
-      })
-      .then((data) => {
-        console.log(data.results);
-      });
+    fetchMoviesByUrl(
+      "https://api.themoviedb.org/3/discover/movie?api_key=" +
+        apiKey +
+        "&primary_release_date.gte=2024-01-19"
+    );
+    movieSortTitle.text("Future Releases");
   }
-};
+}
 fetchMovies();
 // On Search button click fetch data about movies from OMDB
 searchBtn.on("click", function () {
