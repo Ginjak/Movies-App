@@ -52,11 +52,14 @@ var querUrl =
 //   });
 
 function movieReviews(movietitle) {
+	console.log(movietitle);
 	var querUrl =
-		"https://api.themoviedb.org/3/search/movie?query=matrix+resurrection&api_key=c9496f893f42d58d46a50e1820b050e8";
-		//'https://api.themoviedb.org/3/movie/1771?api_key=c9496f893f42d58d46a50e1820b050e8'
+		"https://api.themoviedb.org/3/search/movie?query=" +
+		movietitle +
+		"&api_key=c9496f893f42d58d46a50e1820b050e8";
+	//'https://api.themoviedb.org/3/movie/1771?api_key=c9496f893f42d58d46a50e1820b050e8'
+	console.log(querUrl);
 
-	
 	fetch(querUrl)
 		.then((resp) => {
 			return resp.json();
@@ -76,7 +79,7 @@ function movieReviews(movietitle) {
 					var reviewtitle;
 					var shortDescription;
 					var criticsName;
-					var Date;
+					var reviewDate;
 					var UrlforReview;
 					var articles;
 					articles = data.results;
@@ -86,7 +89,7 @@ function movieReviews(movietitle) {
 						// shortDescription=articles[i].abstract;
 						UrlforReview = articles[i].url;
 						criticsName = articles[i].author;
-						Date = articles[i].created_at;
+						reviewDate = articles[i].created_at;
 						// console.log("title: "+reviewtitle)
 						console.log("description: " + Date);
 						console.log("weburl: " + UrlforReview);
@@ -96,4 +99,7 @@ function movieReviews(movietitle) {
 			//console.log(data);
 		});
 }
-movieReviews();
+var movie = "matrix resurrection".split(" ").join("+");
+
+console.log(movie);
+//movieReviews(movie);
