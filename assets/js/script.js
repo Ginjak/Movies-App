@@ -80,6 +80,7 @@ function movieReviews(movietitle) {
 					var shortDescription;
 					var criticsName;
 					var reviewDate;
+          var updatedDate;
 					var UrlforReview;
 					var articles;
 					articles = data.results;
@@ -89,9 +90,11 @@ function movieReviews(movietitle) {
 						// shortDescription=articles[i].abstract;
 						UrlforReview = articles[i].url;
 						criticsName = articles[i].author;
+            updatedDate = articles[i].updated_at;
 						reviewDate = articles[i].created_at;
 						// console.log("title: "+reviewtitle)
-						console.log("description: " + Date);
+						console.log("Movie review date: " + reviewDate + " updated: "+updatedDate);
+            console.log("Author: "+criticsName);
 						console.log("weburl: " + UrlforReview);
 					}
 				});
