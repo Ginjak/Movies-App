@@ -1,5 +1,51 @@
 * {
-  margin: 0;
+  margin: 0px;
   padding: 0;
   box-sizing: border-box;
+}
+body {
+  margin 30px;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  background-image: -moz-radial-gradient();
+}
+
+#diverse-selector {
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+h3 {
+  grid-column: span 1;
+}
+
+.form-select {
+  grid-column: span 2;
+  justify-self: end;
+}
+
+#movies-thumb-cards {
+  display: grid;
+  columns: 3;
+  border: #777 solid;
+  border-radius: 10px;
+}
+
+
+/ *responsive part */
+@media screen and (max-width: 960px) {
+#movies-thumb-cards {
+  display: inline;
+
+  gap: 20px;
+  align-items: center;
+}  
+}
+@media screen (max-width: 767px) {
+  #movies-thumb-card {
+  grid-column: auto;
+  display: inline;
+  gap: 20px;
+  align-items: center;
+  }
 }
