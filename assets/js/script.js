@@ -1,7 +1,3 @@
-/* OMDB Url: https://www.omdbapi.com/ 
-query url: http://www.omdbapi.com/?apikey=[yourkey]&
-OMDB query var querUrl = "http://www.omdbapi.com/?apikey=d3150aaf&t=The+matrix";
-OMDB API - d3150aaf
 
 Youtube API - AIzaSyAh-n-mfDEgD7pppdEFT1Mc8gflKClHvjw
 Youtube link to show video, need to add id of a video https://www.youtube.com/watch?v=
@@ -126,3 +122,4 @@ var movie = "matrix resurrection".split(" ").join("+");
 
 //console.log(movie);
 movieReviews(movie);
+
