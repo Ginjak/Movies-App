@@ -1,19 +1,18 @@
 * {
-
   margin: 30px;
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 body {
-
-  margin: 30px;
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", Arial, sans-serif;
 
   background-image: -moz-radial-gradient();
-
+}
+header {
+  height: 100vh;
 }
 .container {
   max-height: 100vh;
@@ -57,16 +56,7 @@ body {
 #result {
   color: #ffffff;
 }
-.info {
-  position: relative;
-  display: grid;
-  grid-template-columns: 4fr 8fr;
-  align-items: center;
-  margin-top: 1.2em;
-}
-.poster {
-  width: 100%;
-}
+
 h2 {
   text-align: center;
   font-size: 1.5em;
@@ -141,7 +131,6 @@ p {
   grid-template-columns: 9fr 3fr;
   gap: 1.2em;
 }
-
 
 /*responsive part */
 @media screen and (max-width: 960px) {
@@ -201,19 +190,15 @@ p {
   border: none;
   cursor: pointer;
 }
+#youtube-trailer {
+  width: 100%;
+  max-height: 451px;
+}
+
 #result {
   color: #ffffff;
 }
-.info {
-  position: relative;
-  display: grid;
-  grid-template-columns: 4fr 8fr;
-  align-items: center;
-  margin-top: 1.2em;
-}
-.poster {
-  width: 100%;
-}
+
 h2 {
   text-align: center;
   font-size: 1.5em;
@@ -222,7 +207,6 @@ h2 {
 }
 .rating {
   display: flex;
-
 
   align-items: center;
   justify-content: center;
@@ -274,16 +258,6 @@ p {
 @media screen and (max-width: 600px) {
   .container {
     font-size: 14px;
-
-  }
-  .info {
-    grid-template-columns: 1fr;
-  }
-
-  .poster {
-    margin: auto;
-    width: auto;
-    max-height: 10.8em;
   }
 }
 
@@ -291,4 +265,3 @@ p {
 #movie-details {
   background: rgb(85, 85, 85);
 }
-
