@@ -7,8 +7,11 @@
   font-family: 'Roboto', sans-serif;
 }
 body {
-  height: 100vh;
-  background: linear-gradient(#408439 ,  #292280 );
+
+  margin: 30px;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  background-image: -moz-radial-gradient();
+
 }
 .container {
   max-height: 100vh;
@@ -136,6 +139,16 @@ p {
   grid-template-columns: 9fr 3fr;
   gap: 1.2em;
 }
+
+
+
+/*responsive part */
+@media screen and (max-width: 960px) {
+#movies-thumb-cards {
+  display: inline;
+
+  gap: 20px;
+
 .search-container input,
 .search-container button {
   font-size: 0.9em;
@@ -163,6 +176,7 @@ p {
   position: relative;
   display: grid;
   grid-template-columns: 4fr 8fr;
+
   align-items: center;
   margin-top: 1.2em;
 }
@@ -175,8 +189,13 @@ h2 {
   font-weight: 600;
   letter-spacing: 0.06em;
 }
-.rating {
-  display: flex;
+
+@media screen and (max-width: 767px) {
+  #movies-thumb-card {
+  grid-column: auto;
+  display: inline;
+  gap: 20px;
+
   align-items: center;
   justify-content: center;
   gap: 0.6em;
