@@ -1,10 +1,8 @@
-
 /* OMDB Url: https://www.omdbapi.com/ 
 query url: http://www.omdbapi.com/?apikey=[yourkey]&
 OMDB query var querUrl = "http://www.omdbapi.com/?apikey=d3150aaf&t=The+matrix";
 OMDB API - d3150aaf
 */
-
 
 var searchInput = $("#search-input");
 var searchBtn = $("#search-btn");
@@ -61,14 +59,22 @@ function createMovieCards(data) {
       <div class="card row-cols-1" style="max-width:fit-content;">
       <div class="row d-flex align-items-center g-0">
       <div class="col-md-4 h-auto col-sm-4">
-            <img src="https://image.tmdb.org/t/p/w200/${data.results[i].poster_path}" class="img-fluid p-2" alt="Movie poster" />
+            <img src="https://image.tmdb.org/t/p/w200/${
+              data.results[i].poster_path
+            }" class="img-fluid p-2" alt="Movie poster" />
           </div>
           <div class="col-md-8 col-sm-8">
             <div class="card-body">
-              <h5 class="card-title">${data.results[i].title}</h5>
-              <p id="rating" class="card-text"><i class="fa-solid fa-star"></i>${data.results[i].vote_average}</p>
+              <h5 id="sort-card-title" data-title="${
+                i + 1
+              }" class="card-title">${data.results[i].title}</h5>
+              <p id="rating" class="card-text"><i class="fa-solid fa-star"></i>${
+                data.results[i].vote_average
+              }</p>
               <p class="card-text">
-                <small class="text-muted">${data.results[i].release_date}</small>
+                <small class="text-muted">${
+                  data.results[i].release_date
+                }</small>
               </p>
             </div>
           </div>
@@ -138,7 +144,6 @@ movieSortOptions.on("change", function () {
   fetchMovies();
 });
 
-
 /* ---------------
 Tomaz code
 ---------------- */
@@ -175,9 +180,8 @@ let getYoutubeVideos = (movieName) => {
 
 // Function to fetch data from API
 const key = "2bd71b72";
-let getMovie = () => {
-  let movieName = movieNameRef.value;
-  let url = `https://www.omdbapi.com/?t=${movieName}&apikey=${key}`;
+let getMovie = (title) => {
+  let url = `https://www.omdbapi.com/?t=${title}&apikey=${key}`;
   // If input field is empty
 
   fetch(url)
@@ -186,39 +190,51 @@ let getMovie = () => {
       // If movie exists in database
       if (data.Response == "True") {
         result.innerHTML = `
-            <div class="info">
-
-                <img src=${data.Poster} class="poster">
-                <div id="youtube-trailer">
+            <div class="info container-xxl">
+              <div class="row">
+                <div class="col-12">
+                  <h2 class="text-start">${data.Title}</h2>
+                  <div class="meta">
+                      <span class="text-start">${data.Year}</span>
+                      <span class="text-start">${data.Rated}</span>
+                      <span class="text-start">${data.Runtime}</span>   
+                      <span class="text-start">${data.imdbRating}</span>
+                  </div>
                 </div>
-                <div>
-                    <h2>${data.Title}</h2>
-                    <div class="rating">
-                    <span style="font-size:300%;color:yellow;">&starf;</span>
-                        <h4>${data.imdbRating}</h4>
-                    </div>
-                    <div class="details">
-                        <span>${data.Rated}</span>
-                        <span>${data.Year}</span>
-                        <span>${data.Runtime}</span>
+               </div>   
+                <div class="row">
+                  <div class="col-12 d-flex position-relative">
+                  <img src=${data.Poster} class="img-fluid poster">
+                  <div id="youtube-trailer">
+                  </div>
+                </div>                   
+                    
+              <div class="row">
+              <div class="col-12 d-flex">
+                        <div class="px-2">${data.Genre.split(",").join(
+                          "</div><div class='px-2'>"
+                        )}</div>
+              </div>
                         
-                    </div>
-                    <div class="genre">
-                        <div>${data.Genre.split(",").join("</div><div>")}</div>
-                        
-                    </div>
-                </div>
+              </div>
             </div>
-            <h3>Plot:</h3>
+            <div class="row">
+            <div class="col-12">           
             <p>${data.Plot}</p>
-            <h3>Cast:</h3>
-            <p>${data.Actors}</p>
+            <p><span>Director(s): </span>${data.Director}</p>
+            <p><span>Writer(s): </span>${data.Writer}</p>
+            <p><span>Actors: </span>${data.Actors}</p>
+            </div>
+            </div>
+            
           `;
-        getYoutubeVideos(movieName)
+        console.log(data);
+        movieReviews(data.Title.split(" ").join("+"));
+        getYoutubeVideos(data.Title)
           .then((videoUrl) => {
             // Append the YouTube video URL to the 'test' paragraph
             $("#youtube-trailer").append(`
-            <iframe width="560" height="315" src="${videoUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe width="100%" height="100%" src="${videoUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             
       `);
           })
@@ -229,110 +245,86 @@ let getMovie = () => {
     });
 };
 
-searchButton.addEventListener("click", getMovie);
-window.addEventListener("load", getMovie);
+searchBtn.on("click", function () {
+  getMovie(searchInput.val());
+});
 
-// var querUrl =
-//   "https://www.googleapis.com/youtube/v3/search?part=snippet&q=TheMatrixtrailer&type=video&key=AIzaSyAh-n-mfDEgD7pppdEFT1Mc8gflKClHvjw";
-
-// OMDB query var querUrl = "http://www.omdbapi.com/?apikey=d3150aaf&t=The+matrix";
 var querUrl =
-	"https://api.nytimes.com/svc/search/v2/articlesearch.json?q=rambo&fq=section_name:Movies&type_of_material:Review&sort=newest&page=0&api-key=v7NMMpYkjMpqpGFtYZymGBQiWFEMTMEb";
-//"http://www.omdbapi.com/?apikey=d3150aaf&t=The+matrix";
-// fetch(querUrl)
-//   .then((resp) => {
-//     return resp.json();
-//   })
-//   .then((data) => {
-//     // Title - console.log(data.Title);
-//     // Release yearconsole.log(data.Year);
-//     // Runtime in minutes console.log(data.Runtime);
-//     // Age rating console.log(data.Rated);
-//     // ImdbRating console.log(data.imdbRating);
-//     // Movie genreconsole.log(data.Genre);
-//     // Movie plot console.log(data.Plot);
-//     //Boxoffice new console.log(data.BoxOffice)
-//     // Movie directors console.log(data.Director);
-//     // Movie Actors console.log(data.Actors);
-//     // Writers console.log(data.Writer);
-//     // Poster image url console.log(data.Poster);
-
-//     console.log(data);
-//   });
+  "https://api.nytimes.com/svc/search/v2/articlesearch.json?q=rambo&fq=section_name:Movies&type_of_material:Review&sort=newest&page=0&api-key=v7NMMpYkjMpqpGFtYZymGBQiWFEMTMEb";
 
 function movieReviews(movietitle) {
-	console.log(movietitle);
-	var querUrl =
-		"https://api.themoviedb.org/3/search/movie?query=" +
-		movietitle +
-		"&api_key=c9496f893f42d58d46a50e1820b050e8";
-	//'https://api.themoviedb.org/3/movie/1771?api_key=c9496f893f42d58d46a50e1820b050e8'
-	console.log(querUrl);
+  console.log(movietitle);
+  var querUrl =
+    "https://api.themoviedb.org/3/search/movie?query=" +
+    movietitle +
+    "&api_key=c9496f893f42d58d46a50e1820b050e8";
+  //'https://api.themoviedb.org/3/movie/1771?api_key=c9496f893f42d58d46a50e1820b050e8'
+  console.log(querUrl);
 
-	fetch(querUrl)
-		.then((resp) => {
-			return resp.json();
-		})
-		.then((data) => {
-			var movieId = data.results[0].id;
-			console.log(movieId);
-			var reviewUrl =
-				"https://api.themoviedb.org/3/movie/" +
-				movieId +
-				"/reviews?api_key=c9496f893f42d58d46a50e1820b050e8";
-			fetch(reviewUrl)
-				.then((resp) => {
-					return resp.json();
-				})
-				.then((data) => {
-					var reviewtitle;
-					var shortDescription;
-					var criticsName;
-					var reviewDate;
-					var updatedDate;
-					var UrlforReview;
-					var content;
-					var articles;
-					articles = data.results;
-					//console.log(articles);
-					for (var i = 0; i < articles.length; i++) {
-						// reviewtitle=articles[i].headline.main;
-						// shortDescription=articles[i].abstract;
-						UrlforReview = articles[i].url;
-						criticsName = articles[i].author;
-						updatedDate = dayjs(articles[i].updated_at).format("DD-MMM-YYYY");
-						reviewDate = dayjs(articles[i].created_at).format("DD-MMM-YYYY");
-						content = articles[i].content;
-						var reviewDiv = $("<div>");
-						var authorHeading = $("<h4>");
-						var reviewDateHeading = $("<h5>");
-						var urltext = $("<a>").attr("href", UrlforReview);
-						var contenttag = $("<p>");
-						authorHeading.text("By: "+criticsName);
-						reviewDateHeading.text("on "+reviewDate + " updated: " + updatedDate);
-						urltext.text(UrlforReview);
+  fetch(querUrl)
+    .then((resp) => {
+      return resp.json();
+    })
+    .then((data) => {
+      var movieId = data.results[0].id;
+      console.log(movieId);
+      var reviewUrl =
+        "https://api.themoviedb.org/3/movie/" +
+        movieId +
+        "/reviews?api_key=c9496f893f42d58d46a50e1820b050e8";
+      fetch(reviewUrl)
+        .then((resp) => {
+          return resp.json();
+        })
+        .then((data) => {
+          $("#movie-review").empty();
+          var reviewtitle;
+          var shortDescription;
+          var criticsName;
+          var reviewDate;
+          var updatedDate;
+          var UrlforReview;
+          var content;
+          var articles;
+          articles = data.results;
+          //console.log(articles);
+          for (var i = 0; i < articles.length; i++) {
+            // reviewtitle=articles[i].headline.main;
+            // shortDescription=articles[i].abstract;
+            UrlforReview = articles[i].url;
+            criticsName = articles[i].author;
+            updatedDate = dayjs(articles[i].updated_at).format("DD-MMM-YYYY");
+            reviewDate = dayjs(articles[i].created_at).format("DD-MMM-YYYY");
+            content = articles[i].content.slice(0, 80) + "...";
+            var reviewDiv = $("<div>");
+            var authorHeading = $("<h4>");
+            var reviewDateHeading = $("<h5>");
+            var urltext = $("<a>").attr("href", UrlforReview);
+            var contenttag = $("<p>");
+            authorHeading.text(criticsName);
+            reviewDateHeading.text(reviewDate);
 
-						contenttag.text(content);
-						reviewDiv.append(authorHeading);
-						reviewDiv.append(reviewDateHeading);
-						reviewDiv.append(urltext);
-						reviewDiv.append("<br>");
-						reviewDiv.append(content);
-						reviewDiv.append("<hr>");
-						$("#movie-review").append(reviewDiv);
-						// console.log(
-						// 	"Movie review date: " + reviewDate + " updated: " + updatedDate
-						// );
-						// console.log("Author: " + criticsName);
-						// console.log("weburl: " + UrlforReview);
-						// console.log(content);
-						// console.log(reviewDiv);
-					}
-				});
-		});
+            urltext.text("Read More");
+            contenttag.text(content);
+            reviewDiv.append(authorHeading);
+            reviewDiv.append(reviewDateHeading);
+            reviewDiv.append(content);
+            reviewDiv.append("<br>");
+            reviewDiv.append(urltext);
+            reviewDiv.append("<hr>");
+            $("#movie-review").append(reviewDiv);
+            // console.log(
+            // 	"Movie review date: " + reviewDate + " updated: " + updatedDate
+            // );
+            // console.log("Author: " + criticsName);
+            // console.log("weburl: " + UrlforReview);
+            // console.log(content);
+            // console.log(reviewDiv);
+          }
+        });
+    });
 }
-var movie = "matrix resurrection".split(" ").join("+");
 
-//console.log(movie);
-movieReviews(movie);
-
+$("#movies").on("click", "#movies-thumb-cards", function () {
+  getMovie($(this).find("#sort-card-title").text().trim());
+});
