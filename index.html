@@ -17,6 +17,7 @@
           <div class="col-6">
             <div class="input-group mb-3">
               <input
+              id="search-input"
                 type="text"
                 class="form-control"
                 placeholder="Search for a Movie"
@@ -27,7 +28,7 @@
               <button
                 class="btn btn-outline-secondary"
                 type="button"
-                id="button-addon2"
+                id="search-btn"
                 style="border-radius: 10px;"
               >
                 Search
@@ -43,161 +44,22 @@
         </div>
         <div class="row">
           <div class="col d-flex" id="diverse-selector" style="padding-bottom: 40px;">
-            <h3 class="col-sm-8">Popular movies</h3>
-            <select class="form-select" aria-label="Default select example"  style="border: 1px, solid; border-radius: 10px;">
-              <option selected>Select movies</option>
-              <option value="1">By genre</option>
-              <option value="2">By rating</option>
-              <option value="3">By year</option>
+            <h3 id="movie-sort-title"class="col-sm-8">Popular movies</h3>
+            <select id="movie-sort-options" class="form-select" aria-label="Default select example"  style="border: 1px, solid; border-radius: 10px;">
+              <option selected value="1">Popular</option>
+              <option value="2">Popular for Kids</option>
+              <option value="3">Upcoming Releases</option>
+              <option value="4">My Favourites</option>
             </select>
           </div>
         </div>
-        <div class="row row-cols-1 row-cols-md-4 g-4">
-          <div class="col" id="movies-thumb-cards" style="border: 1px, solid; border-radius: 10px;">
-            <div class="card row-cols-1" style="max-width:fit-content;">
-              <div class="row d-flex align-items-center g-0";">
-                <div class="col-md-4 h-auto col-sm-4">
-                  <img src="https://www.shutterstock.com/shutterstock/photos/2271051031/display_1500/stock-photo-suitcase-with-travel-accessories-on-blue-background-d-rendering-2271051031.jpg" class="img-fluid rounded-start" alt="..." />
-                </div>
-                <div class="col-md-8 col-sm-8">
-                  <div class="card-body">
-                    <h5 class="card-title">Movie title</h5>
-                    <p class="card-text">Movie rating</p>
-                    <p class="card-text">
-                      <small class="text-muted">Year</small>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+
+        <div id="movies" class="row row-cols-1 row-cols-md-4 g-4">
+
           </div>
-          <div class="col" id="movies-thumb-cards" style="border: 1px, solid; border-radius: 10px;">
-            <div class="card row-cols-1" style="max-width:fit-content;">
-              <div class="row d-flex align-items-center g-0";">
-                <div class="col-md-4 h-auto col-sm-4">
-                  <img src="https://www.shutterstock.com/shutterstock/photos/2271051031/display_1500/stock-photo-suitcase-with-travel-accessories-on-blue-background-d-rendering-2271051031.jpg" class="img-fluid rounded-start" alt="..." />
-                </div>
-                <div class="col-md-8 col-sm-8">
-                  <div class="card-body">
-                    <h5 class="card-title">Movie title</h5>
-                    <p class="card-text">Movie rating</p>
-                    <p class="card-text">
-                      <small class="text-muted">Year</small>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col" id="movies-thumb-cards" style="border: 1px, solid; border-radius: 10px;">
-            <div class="card row-cols-1" style="max-width:fit-content;">
-              <div class="row d-flex align-items-center g-0";">
-                <div class="col-md-4 h-auto col-sm-4">
-                  <img src="https://www.shutterstock.com/shutterstock/photos/2271051031/display_1500/stock-photo-suitcase-with-travel-accessories-on-blue-background-d-rendering-2271051031.jpg" class="img-fluid rounded-start" alt="..." />
-                </div>
-                <div class="col-md-8 col-sm-8">
-                  <div class="card-body">
-                    <h5 class="card-title">Movie title</h5>
-                    <p class="card-text">Movie rating</p>
-                    <p class="card-text">
-                      <small class="text-muted">Year</small>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col" id="movies-thumb-cards" style="border: 1px, solid; border-radius: 10px;">
-            <div class="card row-cols-1" style="max-width:fit-content;">
-              <div class="row d-flex align-items-center g-0">
-                <div class="col-md-4 h-auto col-sm-4">
-                  <img src="https://www.shutterstock.com/shutterstock/photos/2271051031/display_1500/stock-photo-suitcase-with-travel-accessories-on-blue-background-d-rendering-2271051031.jpg" class="img-fluid rounded-start" alt="..." />
-                </div>
-                <div class="col-md-8 col-sm-8">
-                  <div class="card-body">
-                    <h5 class="card-title">Movie title</h5>
-                    <p class="card-text">Movie rating</p>
-                    <p class="card-text">
-                      <small class="text-muted">Year</small>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col" id="movies-thumb-cards" style="border: 1px, solid; border-radius: 10px;">
-            <div class="card row-cols-1" style="max-width:fit-content;">
-              <div class="row d-flex align-items-center g-0">
-                <div class="col-md-4 h-auto col-sm-4">
-                  <img src="https://www.shutterstock.com/shutterstock/photos/2271051031/display_1500/stock-photo-suitcase-with-travel-accessories-on-blue-background-d-rendering-2271051031.jpg" class="img-fluid rounded-start" alt="..." />
-                </div>
-                <div class="col-md-8 col-sm-8">
-                  <div class="card-body">
-                    <h5 class="card-title">Movie title</h5>
-                    <p class="card-text">Movie rating</p>
-                    <p class="card-text">
-                      <small class="text-muted">Year</small>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col" id="movies-thumb-cards" style="border: 1px, solid; border-radius: 10px;">
-            <div class="card row-cols-1" style="max-width:fit-content;">
-              <div class="row d-flex align-items-center g-0">
-                <div class="col-md-4 h-auto col-sm-4">
-                  <img src="https://www.shutterstock.com/shutterstock/photos/2271051031/display_1500/stock-photo-suitcase-with-travel-accessories-on-blue-background-d-rendering-2271051031.jpg" class="img-fluid rounded-start" alt="..." />
-                </div>
-                <div class="col-md-8 col-sm-8">
-                  <div class="card-body">
-                    <h5 class="card-title">Movie title</h5>
-                    <p class="card-text">Movie rating</p>
-                    <p class="card-text">
-                      <small class="text-muted">Year</small>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col" id="movies-thumb-cards" style="border: 1px, solid; border-radius: 10px;">
-            <div class="card row-cols-1" style="max-width:fit-content;">
-              <div class="row d-flex align-items-center g-0">
-                <div class="col-md-4 h-auto col-sm-4">
-                  <img src="https://www.shutterstock.com/shutterstock/photos/2271051031/display_1500/stock-photo-suitcase-with-travel-accessories-on-blue-background-d-rendering-2271051031.jpg" class="img-fluid rounded-start" alt="..." />
-                </div>
-                <div class="col-md-8 col-sm-8">
-                  <div class="card-body">
-                    <h5 class="card-title">Movie title</h5>
-                    <p class="card-text">Movie rating</p>
-                    <p class="card-text">
-                      <small class="text-muted">Year</small>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col" id="movies-thumb-cards" style="border: 1px, solid; border-radius: 10px;">
-            <div class="card row-cols-1" style="max-width:fit-content;">
-              <div class="row d-flex align-items-center g-0">
-                <div class="col-md-4 h-auto col-sm-4">
-                  <img src="https://www.shutterstock.com/shutterstock/photos/2271051031/display_1500/stock-photo-suitcase-with-travel-accessories-on-blue-background-d-rendering-2271051031.jpg" class="img-fluid rounded-start" alt="..." />
-                </div>
-                <div class="col-md-8 col-sm-8">
-                  <div class="card-body">
-                    <h5 class="card-title">Movie title</h5>
-                    <p class="card-text">Movie rating</p>
-                    <p class="card-text">
-                      <small class="text-muted">Year</small>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          </div>
+        <section id="movie-details">
+          
+        </section>
         </div>
       </div>
     </header>
@@ -207,6 +69,8 @@
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
       crossorigin="anonymous"
     ></script>
+    <!-- Font awsome -->
+    <script src="https://kit.fontawesome.com/8576b8686b.js" crossorigin="anonymous"></script>
     <!-- JQuery -->
     <script
       src="https://code.jquery.com/jquery-3.7.1.js"

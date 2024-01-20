@@ -9,7 +9,9 @@
 body {
 
   margin: 30px;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+
   background-image: -moz-radial-gradient();
 
 }
@@ -141,14 +143,44 @@ p {
 }
 
 
-
 /*responsive part */
 @media screen and (max-width: 960px) {
-#movies-thumb-cards {
-  display: inline;
+  #movies-thumb-cards {
+    display: inline;
+    gap: 20px;
+    align-items: center;
+  }
+}
+@media screen and (max-width: 767px) {
+  #movies-thumb-card {
+    grid-column: auto;
+    display: inline;
+    gap: 20px;
+    align-items: center;
+  }
+}
 
-  gap: 20px;
+/* Tomaz styles */
 
+.container {
+  max-height: 100vh;
+  font-size: 16px;
+  width: 90vw;
+  max-width: 38.5em;
+  padding: 3em 1.8em;
+  background-color: #201f28;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  border-radius: 0.3em;
+  box-shadow: 1.2em 2em 3em rgba(0, 0, 0, 0.4);
+}
+.search-container {
+  display: grid;
+  grid-template-columns: 9fr 3fr;
+  gap: 1.2em;
+}
 .search-container input,
 .search-container button {
   font-size: 0.9em;
@@ -176,7 +208,6 @@ p {
   position: relative;
   display: grid;
   grid-template-columns: 4fr 8fr;
-
   align-items: center;
   margin-top: 1.2em;
 }
@@ -189,12 +220,9 @@ h2 {
   font-weight: 600;
   letter-spacing: 0.06em;
 }
+.rating {
+  display: flex;
 
-@media screen and (max-width: 767px) {
-  #movies-thumb-card {
-  grid-column: auto;
-  display: inline;
-  gap: 20px;
 
   align-items: center;
   justify-content: center;
@@ -246,11 +274,12 @@ p {
 @media screen and (max-width: 600px) {
   .container {
     font-size: 14px;
+
   }
   .info {
     grid-template-columns: 1fr;
   }
-}
+
   .poster {
     margin: auto;
     width: auto;
@@ -262,3 +291,4 @@ p {
 #movie-details {
   background: rgb(85, 85, 85);
 }
+
