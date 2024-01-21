@@ -135,7 +135,7 @@ searchBtn.on("click", function () {
       {
         scrollTop: $("#movie-details").offset().top,
       },
-      200
+      1000
     );
   }
 });
@@ -192,8 +192,9 @@ let getMovie = (title) => {
         result.innerHTML = `
             <div class="info container-xxl">
               <div class="row">
-                <div class="col-12">
-                  <h2 class="text-start">${data.Title}</h2>
+                <div class="col-12 position-relative">
+                  <h2 class="text-start d-flex">${data.Title}</h2>
+                  <button id="favorites-btn" class="d-flex flex-column" title="Add To Favorites"><i class="fa-regular fa-star"></i></button>
                   <div class="meta">
                       <span class="text-start">${data.Year}</span>
                       <span class="text-start">${data.Rated}</span>

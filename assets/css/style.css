@@ -63,6 +63,25 @@ h2 {
   font-weight: 600;
   letter-spacing: 0.06em;
 }
+
+#movies-thumb-cards .card {
+  cursor: pointer;
+}
+#favorites-btn {
+  padding: 0;
+  text-align: center;
+  border: none;
+  background: none;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+}
+#favorites-btn i {
+  font-size: 24px;
+  width: 100%;
+  text-align: center;
+}
 .rating {
   display: flex;
   align-items: center;
@@ -199,12 +218,6 @@ p {
   color: #ffffff;
 }
 
-h2 {
-  text-align: center;
-  font-size: 1.5em;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-}
 .rating {
   display: flex;
 
