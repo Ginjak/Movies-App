@@ -9,9 +9,8 @@ var searchBtn = $("#search-btn");
 var movieSortTitle = $("#movie-sort-title");
 var movieSortOptions = $("#movie-sort-options");
 var movieCards = $("#movies");
-
 var movieInfo = $("#movie-info");
-
+var currentDay = dayjs().format("YYYY-MM-DD");
 /* -----------------------
         Functions
    ----------------------- */
@@ -54,14 +53,16 @@ function createMovieCards(data) {
   movieCards.empty();
 
   for (var i = 0; i < 8; i++) {
+    var posterPath = data.results[i].poster_path;
+    var imgSrc = posterPath
+      ? `https://image.tmdb.org/t/p/w200/${posterPath}`
+      : "/assets/img/No_image.png";
     var card =
       $(`<div class="col" id="movies-thumb-cards" style="border: 1px, solid; border-radius: 10px;">
       <div class="card row-cols-1" style="max-width:fit-content;">
       <div class="row d-flex align-items-center g-0">
       <div class="col-md-4 h-auto col-sm-4">
-            <img src="https://image.tmdb.org/t/p/w200/${
-              data.results[i].poster_path
-            }" class="img-fluid p-2" alt="Movie poster" />
+            <img src="${imgSrc}" class="img-fluid p-2" alt="Movie poster" />
           </div>
           <div class="col-md-8 col-sm-8">
             <div class="card-body">
@@ -90,6 +91,7 @@ function createMovieCards(data) {
 function fetchMovies() {
   var apiKey = "bdc89408c9f3fc4ec6ef3b8781672df0";
   var movieSortOptions = $("#movie-sort-options");
+  var threeMonthsFromToday = dayjs().add(3, "month").format("YYYY-MM-DD");
 
   // Function to fetch movies by url
   function fetchMoviesByUrl(url) {
@@ -120,7 +122,11 @@ function fetchMovies() {
     fetchMoviesByUrl(
       "https://api.themoviedb.org/3/discover/movie?api_key=" +
         apiKey +
-        "&primary_release_date.gte=2024-01-19"
+        "&primary_release_date.gte=" +
+        currentDay +
+        "&primary_release_date.lte=" +
+        threeMonthsFromToday +
+        "&sort_by=primary_release_date.asc"
     );
 
     movieSortTitle.text("Upcoming Releases");
@@ -140,8 +146,16 @@ searchBtn.on("click", function () {
   }
 });
 
+var test = function () {
+  $("#movies-thumb-cards .card").addClass("test");
+};
 movieSortOptions.on("change", function () {
   fetchMovies();
+  setTimeout(function () {
+    if (movieSortOptions.val() === "3") {
+      $("#movies-thumb-cards .card").css("cursor", "not-allowed");
+    }
+  }, 500);
 });
 
 /* ---------------
@@ -327,5 +341,11 @@ function movieReviews(movietitle) {
 }
 
 $("#movies").on("click", "#movies-thumb-cards", function () {
-  getMovie($(this).find("#sort-card-title").text().trim());
+  if (
+    movieSortOptions.val() === "1" ||
+    movieSortOptions.val() === "2" ||
+    movieSortOptions.val() === "4"
+  ) {
+    getMovie($(this).find("#sort-card-title").text().trim());
+  }
 });
