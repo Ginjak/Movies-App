@@ -131,6 +131,64 @@ function fetchMovies() {
 
     movieSortTitle.text("Upcoming Releases");
   }
+  if (movieSortOptions.val() === "4") {
+    movieCards.empty();
+    var moviesFromLS = localStorage.getItem("FavoriteMovies");
+    if (moviesFromLS) {
+      var favoriteMovies = JSON.parse(moviesFromLS);
+      for (var i = 0; i < favoriteMovies.length; i++) {
+        var querUrl = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${favoriteMovies[
+          i
+        ]
+          .split(" ")
+          .join("+")}`;
+
+        console.log(favoriteMovies[i].split(" ").join("+"));
+        fetch(querUrl)
+          .then((resp) => {
+            return resp.json();
+          })
+          .then((data) => {
+            console.log(data);
+            console.log(data.results[0].vote_average.toFixed(1));
+            var posterPath = data.results[0].poster_path;
+            var imgSrc = posterPath
+              ? `https://image.tmdb.org/t/p/w200/${posterPath}`
+              : "/assets/img/No_image.png";
+            var card =
+              $(`<div class="col" id="movies-thumb-cards" style="border: 1px, solid; border-radius: 10px;">
+              <div class="card row-cols-1" style="max-width:fit-content;">
+              <div class="row d-flex align-items-center g-0">
+              <div class="col-md-4 h-auto col-sm-4">
+                    <img src="${imgSrc}" class="img-fluid p-2" alt="Movie poster" />
+                  </div>
+                  <div class="col-md-8 col-sm-8">
+                    <div class="card-body">
+                      <h5 id="sort-card-title" data-title="${
+                        i + 1
+                      }" class="card-title">${data.results[0].title}</h5>
+                      <p id="rating" class="card-text"><i class="fa-solid fa-star"></i>${data.results[0].vote_average.toFixed(
+                        1
+                      )}</p>
+                      <p class="card-text">
+                        <small class="text-muted">${
+                          data.results[0].release_date
+                        }</small>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>`);
+
+            movieCards.append(card);
+            console.log(data);
+          });
+      }
+    } else {
+      console.log("Array is empty");
+    }
+  }
 }
 fetchMovies();
 // On Search button click fetch data about movies from OMDB
@@ -146,11 +204,9 @@ searchBtn.on("click", function () {
   }
 });
 
-var test = function () {
-  $("#movies-thumb-cards .card").addClass("test");
-};
 movieSortOptions.on("change", function () {
   fetchMovies();
+  // Changed cursor to not-allowed when Future realeases selected to avoid missing data errors
   setTimeout(function () {
     if (movieSortOptions.val() === "3") {
       $("#movies-thumb-cards .card").css("cursor", "not-allowed");
@@ -257,6 +313,19 @@ let getMovie = (title) => {
             console.error(error);
           });
       }
+
+      $("#movie-details").on("click", "#favorites-btn", function () {
+        var favorites =
+          JSON.parse(localStorage.getItem("FavoriteMovies")) || [];
+        if (favorites.length < 8) {
+          favorites.push(data.Title.trim());
+          var favoriteMovies = [...new Set(favorites)];
+          localStorage.setItem(
+            "FavoriteMovies",
+            JSON.stringify(favoriteMovies)
+          );
+        }
+      });
     });
 };
 
