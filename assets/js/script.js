@@ -59,7 +59,7 @@ function createMovieCards(data) {
       : "/assets/img/No_image.png";
     var card =
       $(`<div class="col" id="movies-thumb-cards" style="border: 1px, solid; border-radius: 10px;">
-      <div class="card row-cols-1" style="max-width:fit-content;">
+      <div class="movie-wraper card row-cols-1" style="max-width:fit-content;">
       <div class="row d-flex align-items-center g-0">
       <div class="col-md-4 h-auto col-sm-4">
             <img src="${imgSrc}" class="img-fluid p-2" alt="Movie poster" />
@@ -132,41 +132,54 @@ function fetchMovies() {
     movieSortTitle.text("Upcoming Releases");
   }
   if (movieSortOptions.val() === "4") {
-    movieCards.empty();
-    var moviesFromLS = localStorage.getItem("FavoriteMovies");
-    if (moviesFromLS) {
-      var favoriteMovies = JSON.parse(moviesFromLS);
-      for (var i = 0; i < favoriteMovies.length; i++) {
-        var querUrl = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${favoriteMovies[
-          i
-        ]
-          .split(" ")
-          .join("+")}`;
+    aaa();
+  }
+}
+var aaa = function () {
+  movieCards.empty();
+  var apiKey = "bdc89408c9f3fc4ec6ef3b8781672df0";
+  var moviesFromLS = localStorage.getItem("FavoriteMovies");
+  if (moviesFromLS) {
+    var favoriteMovies = JSON.parse(moviesFromLS);
+    for (var i = 0; i < favoriteMovies.length; i++) {
+      var querUrl = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${favoriteMovies[
+        i
+      ]
+        .split(" ")
+        .join("+")}`;
+      console.log("asdasdasd");
+      bbbb(querUrl, i);
+    }
+  } else {
+    console.log("Array is empty");
+    var noFavorites = $("<h5>No favorite movies yet</h5>");
+    movieCards.append(noFavorites);
+  }
+};
 
-        console.log(favoriteMovies[i].split(" ").join("+"));
-        fetch(querUrl)
-          .then((resp) => {
-            return resp.json();
-          })
-          .then((data) => {
-            console.log(data);
-            console.log(data.results[0].vote_average.toFixed(1));
-            var posterPath = data.results[0].poster_path;
-            var imgSrc = posterPath
-              ? `https://image.tmdb.org/t/p/w200/${posterPath}`
-              : "/assets/img/No_image.png";
-            var card =
-              $(`<div class="col" id="movies-thumb-cards" style="border: 1px, solid; border-radius: 10px;">
-              <div class="card row-cols-1" style="max-width:fit-content;">
+var bbbb = function (url, index) {
+  fetch(url)
+    .then((resp) => {
+      return resp.json();
+    })
+    .then((data) => {
+      var posterPath = data.results[0].poster_path;
+      var imgSrc = posterPath
+        ? `https://image.tmdb.org/t/p/w200/${posterPath}`
+        : "/assets/img/No_image.png";
+      var card =
+        $(`<div class="col" id="movies-thumb-cards-${index}" style="border: 1px, solid; border-radius: 10px;">
+              <div class="movie-wraper card row-cols-1" style="max-width:fit-content;">
               <div class="row d-flex align-items-center g-0">
               <div class="col-md-4 h-auto col-sm-4">
                     <img src="${imgSrc}" class="img-fluid p-2" alt="Movie poster" />
                   </div>
                   <div class="col-md-8 col-sm-8">
-                    <div class="card-body">
-                      <h5 id="sort-card-title" data-title="${
-                        i + 1
-                      }" class="card-title">${data.results[0].title}</h5>
+                    <div class="card-body position-relative">
+                      <div id="remove-favorite"><i class="fa-solid fa-xmark"></i></div>
+                      <h5 id="sort-card-title" class="card-title">${
+                        data.results[0].title
+                      }</h5>
                       <p id="rating" class="card-text"><i class="fa-solid fa-star"></i>${data.results[0].vote_average.toFixed(
                         1
                       )}</p>
@@ -181,15 +194,39 @@ function fetchMovies() {
               </div>
             </div>`);
 
-            movieCards.append(card);
-            console.log(data);
-          });
-      }
-    } else {
-      console.log("Array is empty");
-    }
-  }
-}
+      movieCards.append(card);
+
+      $(`#movies-thumb-cards-${index}`).on(
+        "click",
+        "#remove-favorite",
+        function () {
+          // Find the title associated with the clicked card
+          var titleToRemove = $(this)
+            .closest(".card")
+            .find("#sort-card-title")
+            .text();
+          // Find the index of the title in the favoriteMovies array
+          var moviesFromLS = localStorage.getItem("FavoriteMovies");
+          var favoriteMovies = JSON.parse(moviesFromLS);
+          var elementIndex = favoriteMovies.indexOf(titleToRemove);
+          // Remove the element if found
+          if (elementIndex !== -1) {
+            favoriteMovies.splice(elementIndex, 1);
+
+            // Update local storage with the modified array
+            localStorage.setItem(
+              "FavoriteMovies",
+              JSON.stringify(favoriteMovies)
+            );
+            $("#movie-details").empty();
+            $("#movie-review").empty();
+            aaa();
+          }
+        }
+      );
+    });
+};
+
 fetchMovies();
 // On Search button click fetch data about movies from OMDB
 searchBtn.on("click", function () {
@@ -206,6 +243,8 @@ searchBtn.on("click", function () {
 
 movieSortOptions.on("change", function () {
   fetchMovies();
+  $("#movie-details").empty();
+  $("#movie-review").empty();
   // Changed cursor to not-allowed when Future realeases selected to avoid missing data errors
   setTimeout(function () {
     if (movieSortOptions.val() === "3") {
@@ -409,7 +448,7 @@ function movieReviews(movietitle) {
     });
 }
 
-$("#movies").on("click", "#movies-thumb-cards", function () {
+$("#movies").on("click", ".movie-wraper", function () {
   if (
     movieSortOptions.val() === "1" ||
     movieSortOptions.val() === "2" ||

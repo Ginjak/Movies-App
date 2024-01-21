@@ -64,8 +64,19 @@ h2 {
   letter-spacing: 0.06em;
 }
 
-#movies-thumb-cards .card {
+#movies-thumb-cards .card,
+.movie-wraper.card {
   cursor: pointer;
+}
+
+#remove-favorite {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+}
+#remove-favorite:hover {
+  color: red;
 }
 #favorites-btn {
   padding: 0;
