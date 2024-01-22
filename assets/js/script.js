@@ -230,13 +230,15 @@ var displayFavoriteMovies = function (url, index) {
 fetchMovies();
 // On Search button click fetch data about movies from OMDB
 searchBtn.on("click", function () {
+  $("#movie-details").empty();
+  $("#movie-review").empty();
   if (searchInput.val() !== "") {
-    fetchMovieByTitle(searchInput.val());
+    getMovie(searchInput.val());
     $("html, body").animate(
       {
         scrollTop: $("#movie-details").offset().top,
       },
-      1000
+      300
     );
   }
 });
@@ -304,9 +306,11 @@ let getYoutubeVideos = (movieName) => {
 // Function to fetch data from API
 const key = "2bd71b72";
 let getMovie = (title) => {
-  let url = `https://www.omdbapi.com/?t=${title}&apikey=${key}`;
-  // If input field is empty
+  $("#movie-details").empty();
+  $("#movie-review").empty();
 
+  searchInput.val() === "";
+  let url = `https://www.omdbapi.com/?t=${title}&apikey=${key}`;
   fetch(url)
     .then((resp) => resp.json())
     .then((data) => {
@@ -368,30 +372,32 @@ let getMovie = (title) => {
           });
       }
 
-      $("#movie-details").on("click", "#favorites-btn", function () {
-        var favorites =
-          JSON.parse(localStorage.getItem("FavoriteMovies")) || [];
-        if (favorites.length < 8) {
-          favorites.push(data.Title.trim());
-          var favoriteMovies = [...new Set(favorites)];
-          localStorage.setItem(
-            "FavoriteMovies",
-            JSON.stringify(favoriteMovies)
-          );
-        }
-      });
+      $("#movie-details")
+        .off("click", "#favorites-btn")
+        .on("click", "#favorites-btn", function () {
+          var title = data.Title.trim();
+
+          var favorites =
+            JSON.parse(localStorage.getItem("FavoriteMovies")) || [];
+          if (favorites.length < 8) {
+            favorites.push(title);
+            var favoriteMovies = [...new Set(favorites)];
+            localStorage.setItem(
+              "FavoriteMovies",
+              JSON.stringify(favoriteMovies)
+            );
+          }
+        });
 
       var moviesFromLS = localStorage.getItem("FavoriteMovies");
-      if (moviesFromLS.includes(data.Title)) {
+      if (moviesFromLS.includes(data.Title.trim())) {
         $("#favorites-btn i").css("color", "#ffb92a");
         $("#favorites-btn i").attr("title", "Already In Favorites");
+        searchInput.val("");
+        $("#movie-details").empty();
       }
     });
 };
-
-searchBtn.on("click", function () {
-  getMovie(searchInput.val());
-});
 
 var querUrl =
   "https://api.nytimes.com/svc/search/v2/articlesearch.json?q=rambo&fq=section_name:Movies&type_of_material:Review&sort=newest&page=0&api-key=v7NMMpYkjMpqpGFtYZymGBQiWFEMTMEb";
@@ -475,6 +481,12 @@ $("#movies").on("click", ".movie-wraper", function () {
     movieSortOptions.val() === "2" ||
     movieSortOptions.val() === "4"
   ) {
+    $("html, body").animate(
+      {
+        scrollTop: $("#movie-details").offset().top,
+      },
+      300
+    );
     getMovie($(this).find("#sort-card-title").text().trim());
   }
 });
@@ -482,5 +494,7 @@ $("#movies").on("click", ".movie-wraper", function () {
 $("#clear-full-history").on("click", function () {
   localStorage.clear();
   clearFavoriteHistory.addClass("d-none");
+  $("#movie-details").empty();
+  $("#movie-review").empty();
   fetchFavoriteMovies();
 });
