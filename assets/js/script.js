@@ -10,6 +10,7 @@ var movieSortTitle = $("#movie-sort-title");
 var movieSortOptions = $("#movie-sort-options");
 var movieCards = $("#movies");
 var movieInfo = $("#movie-info");
+var clearFavoriteHistory = $("#clear-button");
 var currentDay = dayjs().format("YYYY-MM-DD");
 /* -----------------------
         Functions
@@ -132,10 +133,10 @@ function fetchMovies() {
     movieSortTitle.text("Upcoming Releases");
   }
   if (movieSortOptions.val() === "4") {
-    aaa();
+    fetchFavoriteMovies();
   }
 }
-var aaa = function () {
+var fetchFavoriteMovies = function () {
   movieCards.empty();
   var apiKey = "bdc89408c9f3fc4ec6ef3b8781672df0";
   var moviesFromLS = localStorage.getItem("FavoriteMovies");
@@ -147,17 +148,15 @@ var aaa = function () {
       ]
         .split(" ")
         .join("+")}`;
-      console.log("asdasdasd");
-      bbbb(querUrl, i);
+      displayFavoriteMovies(querUrl, i);
     }
   } else {
-    console.log("Array is empty");
     var noFavorites = $("<h5>No favorite movies yet</h5>");
     movieCards.append(noFavorites);
   }
 };
 
-var bbbb = function (url, index) {
+var displayFavoriteMovies = function (url, index) {
   fetch(url)
     .then((resp) => {
       return resp.json();
@@ -169,14 +168,15 @@ var bbbb = function (url, index) {
         : "/assets/img/No_image.png";
       var card =
         $(`<div class="col" id="movies-thumb-cards-${index}" style="border: 1px, solid; border-radius: 10px;">
-              <div class="movie-wraper card row-cols-1" style="max-width:fit-content;">
+              <div class="movie-wraper position-relative card row-cols-1" style="max-width:fit-content;">
+              <div id="remove-favorite"><i class="fa-solid fa-xmark"></i></div>
               <div class="row d-flex align-items-center g-0">
               <div class="col-md-4 h-auto col-sm-4">
                     <img src="${imgSrc}" class="img-fluid p-2" alt="Movie poster" />
                   </div>
                   <div class="col-md-8 col-sm-8">
-                    <div class="card-body position-relative">
-                      <div id="remove-favorite"><i class="fa-solid fa-xmark"></i></div>
+                    <div class="card-body">
+                      
                       <h5 id="sort-card-title" class="card-title">${
                         data.results[0].title
                       }</h5>
@@ -220,7 +220,7 @@ var bbbb = function (url, index) {
             );
             $("#movie-details").empty();
             $("#movie-review").empty();
-            aaa();
+            fetchFavoriteMovies();
           }
         }
       );
@@ -243,6 +243,7 @@ searchBtn.on("click", function () {
 
 movieSortOptions.on("change", function () {
   fetchMovies();
+  $(clearFavoriteHistory).addClass("d-none");
   $("#movie-details").empty();
   $("#movie-review").empty();
   // Changed cursor to not-allowed when Future realeases selected to avoid missing data errors
@@ -251,6 +252,19 @@ movieSortOptions.on("change", function () {
       $("#movies-thumb-cards .card").css("cursor", "not-allowed");
     }
   }, 500);
+
+  if (
+    movieSortOptions.val() === "4" &&
+    localStorage.getItem("FavoriteMovies").length > 0
+  ) {
+    $(clearFavoriteHistory).removeClass("d-none");
+  }
+  if (
+    movieSortOptions.val() === "4" &&
+    localStorage.getItem("FavoriteMovies").length === 2
+  ) {
+    $(clearFavoriteHistory).addClass("d-none");
+  }
 });
 
 /* ---------------
@@ -338,8 +352,9 @@ let getMovie = (title) => {
             </div>
             
           `;
-        console.log(data);
+
         movieReviews(data.Title.split(" ").join("+"));
+
         getYoutubeVideos(data.Title)
           .then((videoUrl) => {
             // Append the YouTube video URL to the 'test' paragraph
@@ -365,6 +380,12 @@ let getMovie = (title) => {
           );
         }
       });
+
+      var moviesFromLS = localStorage.getItem("FavoriteMovies");
+      if (moviesFromLS.includes(data.Title)) {
+        $("#favorites-btn i").css("color", "#ffb92a");
+        $("#favorites-btn i").attr("title", "Already In Favorites");
+      }
     });
 };
 
@@ -456,4 +477,10 @@ $("#movies").on("click", ".movie-wraper", function () {
   ) {
     getMovie($(this).find("#sort-card-title").text().trim());
   }
+});
+
+$("#clear-full-history").on("click", function () {
+  localStorage.clear();
+  clearFavoriteHistory.addClass("d-none");
+  fetchFavoriteMovies();
 });
