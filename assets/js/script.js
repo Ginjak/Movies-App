@@ -306,10 +306,6 @@ let getYoutubeVideos = (movieName) => {
 // Function to fetch data from API
 const key = "2bd71b72";
 let getMovie = (title) => {
-  $("#movie-details").empty();
-  $("#movie-review").empty();
-
-  searchInput.val() === "";
   let url = `https://www.omdbapi.com/?t=${title}&apikey=${key}`;
   fetch(url)
     .then((resp) => resp.json())
@@ -393,8 +389,6 @@ let getMovie = (title) => {
       if (moviesFromLS.includes(data.Title.trim())) {
         $("#favorites-btn i").css("color", "#ffb92a");
         $("#favorites-btn i").attr("title", "Already In Favorites");
-        searchInput.val("");
-        $("#movie-details").empty();
       }
     });
 };
