@@ -34,7 +34,7 @@ h3 {
 }
 
 #movies .card-body {
-text-color: black;
+  color: black;
 }
 
 #remove-favorite {
