@@ -33,6 +33,10 @@ h3 {
   cursor: pointer;
 }
 
+#movies .card-body {
+text-color: black;
+}
+
 #remove-favorite {
   position: absolute;
   width: 24px;
