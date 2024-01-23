@@ -15,38 +15,6 @@ var currentDay = dayjs().format("YYYY-MM-DD");
 /* -----------------------
         Functions
    ----------------------- */
-var fetchMovieByTitle = (title) => {
-  var querUrl = `http://www.omdbapi.com/?apikey=d3150aaf&t=${title}`;
-
-  fetch(querUrl)
-    .then((resp) => {
-      return resp.json();
-    })
-    .then((data) => {
-      movieInfo.empty();
-
-      var movieTitle = $(`<h2>${data.Title}</h2>`);
-      var movieMeta = $(
-        `<ul><li>${data.Year}</li><li>${data.Rated}</li><li>${data.Runtime}</li></ul>`
-      );
-      var moviePoster = $(`<img src="${data.Poster}" alt="Movie poster">`);
-      // Movie genres array
-      var movieGenresArr = data.Genre.split(", ");
-
-      movieInfo.append(movieTitle, movieMeta, moviePoster);
-      // Movie genres array, create buttons and append to movieInfo section
-      movieGenresArr.forEach((genre) => {
-        var genreBtn = $(`<button>${genre}</button>`);
-        movieInfo.append(genreBtn);
-      });
-      var moviePlot = $(`<p>${data.Plot}</p>`);
-      var movieDirector = $(`<p>Director(s): ${data.Director}</p>`);
-      var movieWriters = $(`<p>Writer(s): ${data.Writer}</p>`);
-      var movieActors = $(`<p>Actor(s): ${data.Actors}</p>`);
-      movieInfo.append(moviePlot, movieDirector, movieWriters, movieActors);
-      console.log(data);
-    });
-};
 
 // Fetch movies from TMDB by serch criteria
 // Function to create movie cards
@@ -371,8 +339,9 @@ let getMovie = (title) => {
       $("#movie-details")
         .off("click", "#favorites-btn")
         .on("click", "#favorites-btn", function () {
+          $("#favorites-btn i").css("color", "#ffb92a");
+          $("#favorites-btn i").attr("title", "Already In Favorites");
           var title = data.Title.trim();
-
           var favorites =
             JSON.parse(localStorage.getItem("FavoriteMovies")) || [];
           if (favorites.length < 8) {
@@ -386,9 +355,11 @@ let getMovie = (title) => {
         });
 
       var moviesFromLS = localStorage.getItem("FavoriteMovies");
-      if (moviesFromLS.includes(data.Title.trim())) {
-        $("#favorites-btn i").css("color", "#ffb92a");
-        $("#favorites-btn i").attr("title", "Already In Favorites");
+      if (moviesFromLS) {
+        if (moviesFromLS.includes(data.Title.trim())) {
+          $("#favorites-btn i").css("color", "#ffb92a");
+          $("#favorites-btn i").attr("title", "Already In Favorites");
+        }
       }
     });
 };
@@ -403,7 +374,6 @@ function movieReviews(movietitle) {
     movietitle +
     "&api_key=c9496f893f42d58d46a50e1820b050e8";
   //'https://api.themoviedb.org/3/movie/1771?api_key=c9496f893f42d58d46a50e1820b050e8'
-  console.log(querUrl);
 
   fetch(querUrl)
     .then((resp) => {
@@ -411,7 +381,13 @@ function movieReviews(movietitle) {
     })
     .then((data) => {
       var movieId = data.results[0].id;
-      console.log(movieId);
+      var allReviewsUrl =
+        "https://www.themoviedb.org/movie/" +
+        movieId +
+        "-" +
+        movietitle.split("+").join("-") +
+        "/reviews";
+      console.log(allReviewsUrl);
       var reviewUrl =
         "https://api.themoviedb.org/3/movie/" +
         movieId +
@@ -431,8 +407,13 @@ function movieReviews(movietitle) {
           var content;
           var articles;
           articles = data.results;
+          console.log(data);
           //console.log(articles);
-          for (var i = 0; i < articles.length; i++) {
+          var seeAllReviews = $(
+            `<a class="all-reviews" href="${allReviewsUrl}">See all reviews</a>`
+          );
+          $("#movie-review").prepend(seeAllReviews);
+          for (var i = 0; i < 3; i++) {
             // reviewtitle=articles[i].headline.main;
             // shortDescription=articles[i].abstract;
             UrlforReview = articles[i].url;
@@ -440,6 +421,7 @@ function movieReviews(movietitle) {
             updatedDate = dayjs(articles[i].updated_at).format("DD-MMM-YYYY");
             reviewDate = dayjs(articles[i].created_at).format("DD-MMM-YYYY");
             content = articles[i].content.slice(0, 80) + "...";
+            contentFull = articles[i].content;
             var reviewDiv = $("<div>");
             var authorHeading = $("<h4>");
             var reviewDateHeading = $("<h5>");
@@ -447,12 +429,11 @@ function movieReviews(movietitle) {
             var contenttag = $("<p>");
             authorHeading.text(criticsName);
             reviewDateHeading.text(reviewDate);
-
-            urltext.text("Read More");
+            // urltext.text("Read More");
             contenttag.text(content);
             reviewDiv.append(authorHeading);
             reviewDiv.append(reviewDateHeading);
-            reviewDiv.append(content);
+            reviewDiv.append(contentFull);
             reviewDiv.append("<br>");
             reviewDiv.append(urltext);
             reviewDiv.append("<hr>");
