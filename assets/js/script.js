@@ -1,9 +1,3 @@
-/* OMDB Url: https://www.omdbapi.com/ 
-query url: http://www.omdbapi.com/?apikey=[yourkey]&
-OMDB query var querUrl = "http://www.omdbapi.com/?apikey=d3150aaf&t=The+matrix";
-OMDB API - d3150aaf
-*/
-
 var searchInput = $("#search-input");
 var searchBtn = $("#search-btn");
 var movieSortTitle = $("#movie-sort-title");
@@ -102,6 +96,7 @@ function fetchMovies() {
   }
   if (movieSortOptions.val() === "4") {
     fetchFavoriteMovies();
+    movieSortTitle.text("Favorites");
   }
 }
 var fetchFavoriteMovies = function () {
@@ -368,7 +363,6 @@ var querUrl =
   "https://api.nytimes.com/svc/search/v2/articlesearch.json?q=rambo&fq=section_name:Movies&type_of_material:Review&sort=newest&page=0&api-key=v7NMMpYkjMpqpGFtYZymGBQiWFEMTMEb";
 
 function movieReviews(movietitle) {
-  console.log(movietitle);
   var querUrl =
     "https://api.themoviedb.org/3/search/movie?query=" +
     movietitle +
@@ -387,7 +381,6 @@ function movieReviews(movietitle) {
         "-" +
         movietitle.split("+").join("-") +
         "/reviews";
-      console.log(allReviewsUrl);
       var reviewUrl =
         "https://api.themoviedb.org/3/movie/" +
         movieId +
@@ -407,10 +400,8 @@ function movieReviews(movietitle) {
           var content;
           var articles;
           articles = data.results;
-          console.log(data);
-          //console.log(articles);
           var seeAllReviews = $(
-            `<a class="all-reviews" href="${allReviewsUrl}">See all reviews</a>`
+            `<a class="all-reviews btn btn-outline-dark text-uppercase " href="${allReviewsUrl}">See all reviews</a>`
           );
           $("#movie-review").prepend(seeAllReviews);
           for (var i = 0; i < 3; i++) {
@@ -438,13 +429,6 @@ function movieReviews(movietitle) {
             reviewDiv.append(urltext);
             reviewDiv.append("<hr>");
             $("#movie-review").append(reviewDiv);
-            // console.log(
-            // 	"Movie review date: " + reviewDate + " updated: " + updatedDate
-            // );
-            // console.log("Author: " + criticsName);
-            // console.log("weburl: " + UrlforReview);
-            // console.log(content);
-            // console.log(reviewDiv);
           }
         });
     });
