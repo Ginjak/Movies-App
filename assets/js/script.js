@@ -390,6 +390,7 @@ function movieReviews(movietitle) {
           return resp.json();
         })
         .then((data) => {
+          var totalReviewsCount = data.results.length;
           $("#movie-review").empty();
           var reviewtitle;
           var shortDescription;
@@ -401,7 +402,7 @@ function movieReviews(movietitle) {
           var articles;
           articles = data.results;
           var seeAllReviews = $(
-            `<a class="all-reviews btn btn-outline-dark text-uppercase " href="${allReviewsUrl}">See all reviews</a>`
+            `<a class="all-reviews btn btn-secondary text-uppercase " href="${allReviewsUrl}">See all reviews</a><span class=" text-muted fs-6"> (${totalReviewsCount})</span>`
           );
           $("#movie-review").prepend(seeAllReviews);
           for (var i = 0; i < 3; i++) {

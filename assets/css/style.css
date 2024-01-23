@@ -8,7 +8,7 @@
 body {
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", Arial, sans-serif;
-    background-image: -moz-radial-gradient();
+  background-image: -moz-radial-gradient();
 }
 
 header {
@@ -56,6 +56,9 @@ h3 {
   cursor: pointer;
 }
 
+#movies .card-body {
+  color: black;
+}
 #favorites-btn i {
   font-size: 24px;
   width: 100%;
