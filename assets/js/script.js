@@ -10,6 +10,7 @@ var movieSortTitle = $("#movie-sort-title");
 var movieSortOptions = $("#movie-sort-options");
 var movieCards = $("#movies");
 var movieInfo = $("#movie-info");
+var clearFavoriteHistory = $("#clear-button");
 var currentDay = dayjs().format("YYYY-MM-DD");
 /* -----------------------
         Functions
@@ -129,54 +130,53 @@ function fetchMovies() {
 				"&sort_by=primary_release_date.asc"
 		);
 
-		movieSortTitle.text("Upcoming Releases");
-	}
-	if (movieSortOptions.val() === "4") {
-		aaa();
-	}
+    movieSortTitle.text("Upcoming Releases");
+  }
+  if (movieSortOptions.val() === "4") {
+    fetchFavoriteMovies();
+  }
 }
-var aaa = function () {
-	movieCards.empty();
-	var apiKey = "bdc89408c9f3fc4ec6ef3b8781672df0";
-	var moviesFromLS = localStorage.getItem("FavoriteMovies");
-	if (moviesFromLS) {
-		var favoriteMovies = JSON.parse(moviesFromLS);
-		for (var i = 0; i < favoriteMovies.length; i++) {
-			var querUrl = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${favoriteMovies[
-				i
-			]
-				.split(" ")
-				.join("+")}`;
-			console.log("asdasdasd");
-			bbbb(querUrl, i);
-		}
-	} else {
-		console.log("Array is empty");
-		var noFavorites = $("<h5>No favorite movies yet</h5>");
-		movieCards.append(noFavorites);
-	}
+var fetchFavoriteMovies = function () {
+  movieCards.empty();
+  var apiKey = "bdc89408c9f3fc4ec6ef3b8781672df0";
+  var moviesFromLS = localStorage.getItem("FavoriteMovies");
+  if (moviesFromLS) {
+    var favoriteMovies = JSON.parse(moviesFromLS);
+    for (var i = 0; i < favoriteMovies.length; i++) {
+      var querUrl = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${favoriteMovies[
+        i
+      ]
+        .split(" ")
+        .join("+")}`;
+      displayFavoriteMovies(querUrl, i);
+    }
+  } else {
+    var noFavorites = $("<h5>No favorite movies yet</h5>");
+    movieCards.append(noFavorites);
+  }
 };
 
-var bbbb = function (url, index) {
-	fetch(url)
-		.then((resp) => {
-			return resp.json();
-		})
-		.then((data) => {
-			var posterPath = data.results[0].poster_path;
-			var imgSrc = posterPath
-				? `https://image.tmdb.org/t/p/w200/${posterPath}`
-				: "/assets/img/No_image.png";
-			var card =
-				$(`<div class="col" id="movies-thumb-cards-${index}" style="border: 1px, solid; border-radius: 10px;">
-              <div class="movie-wraper card row-cols-1" style="max-width:fit-content;">
+var displayFavoriteMovies = function (url, index) {
+  fetch(url)
+    .then((resp) => {
+      return resp.json();
+    })
+    .then((data) => {
+      var posterPath = data.results[0].poster_path;
+      var imgSrc = posterPath
+        ? `https://image.tmdb.org/t/p/w200/${posterPath}`
+        : "/assets/img/No_image.png";
+      var card =
+        $(`<div class="col" id="movies-thumb-cards-${index}" style="border: 1px, solid; border-radius: 10px;">
+              <div class="movie-wraper position-relative card row-cols-1" style="max-width:fit-content;">
+              <div id="remove-favorite"><i class="fa-solid fa-xmark"></i></div>
               <div class="row d-flex align-items-center g-0">
               <div class="col-md-4 h-auto col-sm-4">
                     <img src="${imgSrc}" class="img-fluid p-2" alt="Movie poster" />
                   </div>
                   <div class="col-md-8 col-sm-8">
-                    <div class="card-body position-relative">
-                      <div id="remove-favorite"><i class="fa-solid fa-xmark"></i></div>
+                    <div class="card-body">
+                      
                       <h5 id="sort-card-title" class="card-title">${
 												data.results[0].title
 											}</h5>
@@ -213,44 +213,60 @@ var bbbb = function (url, index) {
 					if (elementIndex !== -1) {
 						favoriteMovies.splice(elementIndex, 1);
 
-						// Update local storage with the modified array
-						localStorage.setItem(
-							"FavoriteMovies",
-							JSON.stringify(favoriteMovies)
-						);
-						$("#movie-details").empty();
-						$("#movie-review").empty();
-						aaa();
-					}
-				}
-			);
-		});
+            // Update local storage with the modified array
+            localStorage.setItem(
+              "FavoriteMovies",
+              JSON.stringify(favoriteMovies)
+            );
+            $("#movie-details").empty();
+            $("#movie-review").empty();
+            fetchFavoriteMovies();
+          }
+        }
+      );
+    });
 };
 
 fetchMovies();
 // On Search button click fetch data about movies from OMDB
 searchBtn.on("click", function () {
-	if (searchInput.val() !== "") {
-		fetchMovieByTitle(searchInput.val());
-		$("html, body").animate(
-			{
-				scrollTop: $("#movie-details").offset().top,
-			},
-			1000
-		);
-	}
+  $("#movie-details").empty();
+  $("#movie-review").empty();
+  if (searchInput.val() !== "") {
+    getMovie(searchInput.val());
+    $("html, body").animate(
+      {
+        scrollTop: $("#movie-details").offset().top,
+      },
+      300
+    );
+  }
 });
 
 movieSortOptions.on("change", function () {
-	fetchMovies();
-	$("#movie-details").empty();
-	$("#movie-review").empty();
-	// Changed cursor to not-allowed when Future realeases selected to avoid missing data errors
-	setTimeout(function () {
-		if (movieSortOptions.val() === "3") {
-			$("#movies-thumb-cards .card").css("cursor", "not-allowed");
-		}
-	}, 500);
+  fetchMovies();
+  $(clearFavoriteHistory).addClass("d-none");
+  $("#movie-details").empty();
+  $("#movie-review").empty();
+  // Changed cursor to not-allowed when Future realeases selected to avoid missing data errors
+  setTimeout(function () {
+    if (movieSortOptions.val() === "3") {
+      $("#movies-thumb-cards .card").css("cursor", "not-allowed");
+    }
+  }, 500);
+
+  if (
+    movieSortOptions.val() === "4" &&
+    localStorage.getItem("FavoriteMovies").length > 0
+  ) {
+    $(clearFavoriteHistory).removeClass("d-none");
+  }
+  if (
+    movieSortOptions.val() === "4" &&
+    localStorage.getItem("FavoriteMovies").length === 2
+  ) {
+    $(clearFavoriteHistory).addClass("d-none");
+  }
 });
 
 /* ---------------
@@ -290,15 +306,13 @@ let getYoutubeVideos = (movieName) => {
 // Function to fetch data from API
 const key = "2bd71b72";
 let getMovie = (title) => {
-	let url = `https://www.omdbapi.com/?t=${title}&apikey=${key}`;
-	// If input field is empty
-
-	fetch(url)
-		.then((resp) => resp.json())
-		.then((data) => {
-			// If movie exists in database
-			if (data.Response == "True") {
-				result.innerHTML = `
+  let url = `https://www.omdbapi.com/?t=${title}&apikey=${key}`;
+  fetch(url)
+    .then((resp) => resp.json())
+    .then((data) => {
+      // If movie exists in database
+      if (data.Response == "True") {
+        result.innerHTML = `
             <div class="info container-xxl">
               <div class="row">
                 <div class="col-12 position-relative">
@@ -338,12 +352,13 @@ let getMovie = (title) => {
             </div>
             
           `;
-				console.log(data);
-				movieReviews(data.Title.split(" ").join("+"));
-				getYoutubeVideos(data.Title)
-					.then((videoUrl) => {
-						// Append the YouTube video URL to the 'test' paragraph
-						$("#youtube-trailer").append(`
+
+        movieReviews(data.Title.split(" ").join("+"));
+
+        getYoutubeVideos(data.Title)
+          .then((videoUrl) => {
+            // Append the YouTube video URL to the 'test' paragraph
+            $("#youtube-trailer").append(`
             <iframe width="100%" height="100%" src="${videoUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             
       `);
@@ -353,24 +368,30 @@ let getMovie = (title) => {
 					});
 			}
 
-			$("#movie-details").on("click", "#favorites-btn", function () {
-				var favorites =
-					JSON.parse(localStorage.getItem("FavoriteMovies")) || [];
-				if (favorites.length < 8) {
-					favorites.push(data.Title.trim());
-					var favoriteMovies = [...new Set(favorites)];
-					localStorage.setItem(
-						"FavoriteMovies",
-						JSON.stringify(favoriteMovies)
-					);
-				}
-			});
-		});
-};
+      $("#movie-details")
+        .off("click", "#favorites-btn")
+        .on("click", "#favorites-btn", function () {
+          var title = data.Title.trim();
 
-searchBtn.on("click", function () {
-	getMovie(searchInput.val());
-});
+          var favorites =
+            JSON.parse(localStorage.getItem("FavoriteMovies")) || [];
+          if (favorites.length < 8) {
+            favorites.push(title);
+            var favoriteMovies = [...new Set(favorites)];
+            localStorage.setItem(
+              "FavoriteMovies",
+              JSON.stringify(favoriteMovies)
+            );
+          }
+        });
+
+      var moviesFromLS = localStorage.getItem("FavoriteMovies");
+      if (moviesFromLS.includes(data.Title.trim())) {
+        $("#favorites-btn i").css("color", "#ffb92a");
+        $("#favorites-btn i").attr("title", "Already In Favorites");
+      }
+    });
+};
 
 var querUrl =
 	"https://api.nytimes.com/svc/search/v2/articlesearch.json?q=rambo&fq=section_name:Movies&type_of_material:Review&sort=newest&page=0&api-key=v7NMMpYkjMpqpGFtYZymGBQiWFEMTMEb";
@@ -450,11 +471,25 @@ function movieReviews(movietitle) {
 }
 
 $("#movies").on("click", ".movie-wraper", function () {
-	if (
-		movieSortOptions.val() === "1" ||
-		movieSortOptions.val() === "2" ||
-		movieSortOptions.val() === "4"
-	) {
-		getMovie($(this).find("#sort-card-title").text().trim());
-	}
+  if (
+    movieSortOptions.val() === "1" ||
+    movieSortOptions.val() === "2" ||
+    movieSortOptions.val() === "4"
+  ) {
+    $("html, body").animate(
+      {
+        scrollTop: $("#movie-details").offset().top,
+      },
+      300
+    );
+    getMovie($(this).find("#sort-card-title").text().trim());
+  }
+});
+
+$("#clear-full-history").on("click", function () {
+  localStorage.clear();
+  clearFavoriteHistory.addClass("d-none");
+  $("#movie-details").empty();
+  $("#movie-review").empty();
+  fetchFavoriteMovies();
 });
