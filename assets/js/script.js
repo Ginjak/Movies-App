@@ -375,7 +375,12 @@ function movieReviews(movietitle) {
     })
     .then((data) => {
       var movieId = data.results[0].id;
-
+      var allReviewsUrl =
+        "https://www.themoviedb.org/movie/" +
+        movieId +
+        "-" +
+        movietitle.split("+").join("-") +
+        "/reviews";
       var reviewUrl =
         "https://api.themoviedb.org/3/movie/" +
         movieId +
@@ -386,7 +391,7 @@ function movieReviews(movietitle) {
         })
         .then((data) => {
           $("#movie-review").empty();
-
+          var totalReviewsCount = data.results.length;
           var criticsName;
           var reviewDate;
           var UrlforReview;
