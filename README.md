@@ -11,6 +11,8 @@ This is a movie application built with HTML, CSS, JavaScript, and Bootstrap. It 
 - JavaScript
 - Bootstrap
 - Server-side APIs
+- jQuery
+- Day.js
 
 ## APIs Used
 
