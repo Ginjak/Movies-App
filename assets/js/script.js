@@ -1,9 +1,3 @@
-/* OMDB Url: https://www.omdbapi.com/ 
-query url: http://www.omdbapi.com/?apikey=[yourkey]&
-OMDB query var querUrl = "http://www.omdbapi.com/?apikey=d3150aaf&t=The+matrix";
-OMDB API - d3150aaf
-*/
-
 var searchInput = $("#search-input");
 var searchBtn = $("#search-btn");
 var movieSortTitle = $("#movie-sort-title");
@@ -15,38 +9,6 @@ var currentDay = dayjs().format("YYYY-MM-DD");
 /* -----------------------
         Functions
    ----------------------- */
-var fetchMovieByTitle = (title) => {
-	var querUrl = `http://www.omdbapi.com/?apikey=d3150aaf&t=${title}`;
-
-	fetch(querUrl)
-		.then((resp) => {
-			return resp.json();
-		})
-		.then((data) => {
-			movieInfo.empty();
-
-			var movieTitle = $(`<h2>${data.Title}</h2>`);
-			var movieMeta = $(
-				`<ul><li>${data.Year}</li><li>${data.Rated}</li><li>${data.Runtime}</li></ul>`
-			);
-			var moviePoster = $(`<img src="${data.Poster}" alt="Movie poster">`);
-			// Movie genres array
-			var movieGenresArr = data.Genre.split(", ");
-
-			movieInfo.append(movieTitle, movieMeta, moviePoster);
-			// Movie genres array, create buttons and append to movieInfo section
-			movieGenresArr.forEach((genre) => {
-				var genreBtn = $(`<button>${genre}</button>`);
-				movieInfo.append(genreBtn);
-			});
-			var moviePlot = $(`<p>${data.Plot}</p>`);
-			var movieDirector = $(`<p>Director(s): ${data.Director}</p>`);
-			var movieWriters = $(`<p>Writer(s): ${data.Writer}</p>`);
-			var movieActors = $(`<p>Actor(s): ${data.Actors}</p>`);
-			movieInfo.append(moviePlot, movieDirector, movieWriters, movieActors);
-			console.log(data);
-		});
-};
 
 // Fetch movies from TMDB by serch criteria
 // Function to create movie cards
@@ -134,6 +96,7 @@ function fetchMovies() {
   }
   if (movieSortOptions.val() === "4") {
     fetchFavoriteMovies();
+    movieSortTitle.text("Favorites");
   }
 }
 var fetchFavoriteMovies = function () {
@@ -371,8 +334,9 @@ let getMovie = (title) => {
       $("#movie-details")
         .off("click", "#favorites-btn")
         .on("click", "#favorites-btn", function () {
+          $("#favorites-btn i").css("color", "#ffb92a");
+          $("#favorites-btn i").attr("title", "Already In Favorites");
           var title = data.Title.trim();
-
           var favorites =
             JSON.parse(localStorage.getItem("FavoriteMovies")) || [];
           if (favorites.length < 8) {
@@ -386,9 +350,11 @@ let getMovie = (title) => {
         });
 
       var moviesFromLS = localStorage.getItem("FavoriteMovies");
-      if (moviesFromLS.includes(data.Title.trim())) {
-        $("#favorites-btn i").css("color", "#ffb92a");
-        $("#favorites-btn i").attr("title", "Already In Favorites");
+      if (moviesFromLS) {
+        if (moviesFromLS.includes(data.Title.trim())) {
+          $("#favorites-btn i").css("color", "#ffb92a");
+          $("#favorites-btn i").attr("title", "Already In Favorites");
+        }
       }
     });
 };
@@ -397,6 +363,7 @@ var querUrl =
 	"https://api.nytimes.com/svc/search/v2/articlesearch.json?q=rambo&fq=section_name:Movies&type_of_material:Review&sort=newest&page=0&api-key=v7NMMpYkjMpqpGFtYZymGBQiWFEMTMEb";
 
 function movieReviews(movietitle) {
+
 	var querUrl =
 		"https://api.themoviedb.org/3/search/movie?query=" +
 		movietitle +
@@ -420,15 +387,19 @@ function movieReviews(movietitle) {
 				})
 				.then((data) => {
 					$("#movie-review").empty();
-
+          
 					var criticsName;
 					var reviewDate;
 					var UrlforReview;
 					var content;
 					var articles;
 					articles = data.results;
+          var seeAllReviews = $(
+            `<a class="all-reviews btn btn-secondary text-uppercase " href="${allReviewsUrl}">See all reviews</a><span class=" text-muted fs-6"> (${totalReviewsCount})</span>`
+          );
+          $("#movie-review").prepend(seeAllReviews);
 
-					for (var i = 0; i < articles.length; i++) {
+					for (var i = 0; i < 3; i++) {
 						var authorRating = articles[i].author_details.rating;
 						if (articles[i].author_details.rating == null) {
 							authorRating = 0;
@@ -468,6 +439,7 @@ function movieReviews(movietitle) {
 					}
 				});
 		});
+
 }
 
 $("#movies").on("click", ".movie-wraper", function () {
