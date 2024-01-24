@@ -205,3 +205,9 @@ h3 {
     max-height: 150px;
   }
 }
+
+@media (max-width: 576px) {
+  #youtube-trailer {
+    min-height: 350px;
+  }
+}

@@ -19,7 +19,7 @@ function createMovieCards(data) {
     var posterPath = data.results[i].poster_path;
     var imgSrc = posterPath
       ? `https://image.tmdb.org/t/p/w200/${posterPath}`
-      : "/assets/img/No_image.png";
+      : "../img/No_image.png";
     var card =
       $(`<div class="col card-group" id="movies-thumb-cards" style="border: 1px, solid; border-radius: 10px;">
       <div class="movie-wraper card row-cols-1 " style="max-width:100%;">
@@ -292,7 +292,7 @@ let getMovie = (title) => {
                 </div>
                </div>   
                 <div class="row">
-                  <div class="col-12 d-flex position-relative">
+                  <div class="col-12 d-flex flex-column flex-sm-row position-relative">
                   <img src=${data.Poster} class="img-fluid poster">
                   <div id="youtube-trailer">
                   </div>
