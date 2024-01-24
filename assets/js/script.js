@@ -19,7 +19,7 @@ function createMovieCards(data) {
     var posterPath = data.results[i].poster_path;
     var imgSrc = posterPath
       ? `https://image.tmdb.org/t/p/w200/${posterPath}`
-      : "../img/No_image.png";
+      : "./assets/img/No_image.png";
     var card =
       $(`<div class="col card-group" id="movies-thumb-cards" style="border: 1px, solid; border-radius: 10px;">
       <div class="movie-wraper card row-cols-1 " style="max-width:100%;">
