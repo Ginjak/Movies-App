@@ -139,7 +139,7 @@ h3 {
 }
 #movie-reviews-section {
   position: relative;
-  background: url("./assets/img/reviews_section.jpg");
+  background: url("../img/reviews_section.jpg");
   background-size: cover;
   background-position: center;
 }
