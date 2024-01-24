@@ -21,18 +21,18 @@ function createMovieCards(data) {
       ? `https://image.tmdb.org/t/p/w200/${posterPath}`
       : "/assets/img/No_image.png";
     var card =
-      $(`<div class="col" id="movies-thumb-cards" style="border: 1px, solid; border-radius: 10px;">
-      <div class="movie-wraper card row-cols-1" style="max-width:fit-content;">
+      $(`<div class="col card-group" id="movies-thumb-cards" style="border: 1px, solid; border-radius: 10px;">
+      <div class="movie-wraper card row-cols-1 " style="max-width:100%;">
       <div class="row d-flex align-items-center g-0">
-      <div class="col-md-4 h-auto col-sm-4">
+      <div class="col-3 col-sm-2 col-md-4 h-auto ">
             <img src="${imgSrc}" class="img-fluid p-2" alt="Movie poster" />
           </div>
-          <div class="col-md-8 col-sm-8">
+          <div class="col-8">
             <div class="card-body">
               <h5 id="sort-card-title" data-title="${
                 i + 1
               }" class="card-title">${data.results[i].title}</h5>
-              <p id="rating" class="card-text"><i class="fa-solid fa-star"></i>${
+              <p id="rating" class="card-text fw-bold"><i class="fa-solid fa-star"></i>${
                 data.results[i].vote_average
               }</p>
               <p class="card-text">
@@ -392,11 +392,10 @@ function movieReviews(movietitle) {
         .then((data) => {
           var totalReviewsCount = data.results.length;
           $("#movie-review").empty();
-          var reviewtitle;
-          var shortDescription;
+
           var criticsName;
           var reviewDate;
-          var updatedDate;
+
           var UrlforReview;
           var content;
           var articles;
@@ -406,11 +405,9 @@ function movieReviews(movietitle) {
           );
           $("#movie-review").prepend(seeAllReviews);
           for (var i = 0; i < 3; i++) {
-            // reviewtitle=articles[i].headline.main;
-            // shortDescription=articles[i].abstract;
             UrlforReview = articles[i].url;
             criticsName = articles[i].author;
-            updatedDate = dayjs(articles[i].updated_at).format("DD-MMM-YYYY");
+
             reviewDate = dayjs(articles[i].created_at).format("DD-MMM-YYYY");
             content = articles[i].content.slice(0, 80) + "...";
             contentFull = articles[i].content;
