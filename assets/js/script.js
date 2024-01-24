@@ -459,7 +459,7 @@ $("#movies").on("click", ".movie-wraper", function () {
       {
         scrollTop: $("#movie-details").offset().top,
       },
-      300
+      500
     );
     getMovie($(this).find("#sort-card-title").text().trim());
   }
