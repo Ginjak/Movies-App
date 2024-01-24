@@ -220,12 +220,14 @@ movieSortOptions.on("change", function () {
 
   if (
     movieSortOptions.val() === "4" &&
+    localStorage.getItem("FavoriteMovies") !== null &&
     localStorage.getItem("FavoriteMovies").length > 0
   ) {
     $(clearFavoriteHistory).removeClass("d-none");
   }
   if (
     movieSortOptions.val() === "4" &&
+    localStorage.getItem("FavoriteMovies") !== null &&
     localStorage.getItem("FavoriteMovies").length === 2
   ) {
     $(clearFavoriteHistory).addClass("d-none");
@@ -409,7 +411,7 @@ function movieReviews(movietitle) {
           for (var i = 0; i < 3; i++) {
             var authorRating = articles[i].author_details.rating;
             if (articles[i].author_details.rating == null) {
-              authorRating = 0;
+              authorRating = "Not Rated";
             } else {
               authorRating = articles[i].author_details.rating;
             }
