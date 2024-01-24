@@ -114,11 +114,76 @@ h3 {
 }
 
 #movie-details {
-  background: #3f3d3d;
+  background: #000;
 }
 
+.meta span {
+  color: #807e7e;
+}
+.genre {
+  border: 2px solid #807e7e;
+  border-radius: 25px;
+  padding: 6px 24px;
+  color: #807e7e;
+  margin-right: 10px;
+}
+
+.meta i {
+  color: #ffb92a !important;
+  font-size: 18px;
+  margin-right: 5px;
+}
+
+.about-movie p span {
+  color: #807e7e;
+}
 #movie-reviews-section {
-  background: #ecce93;
+  position: relative;
+  background: url("/assets/img/reviews_section.jpg");
+  background-size: cover;
+  background-position: center;
+}
+#movie-reviews-section:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.4));
+}
+#movie-review .card {
+  background: transparent;
+  border: none;
+  position: relative;
+  color: #fff;
+}
+
+#movie-review .review-count {
+  position: relative;
+  color: #807e7e;
+}
+
+#movie-review .card h4 i {
+  color: #ffb92a;
+  margin-right: 5px;
+}
+#movie-review .card h4 {
+  margin-top: 20px;
+  text-transform: uppercase;
+  color: #807e7e;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #807e7e;
+}
+
+#movie-review .card h5 {
+  color: #807e7e;
+  font-size: 14px;
+}
+#movie-review .card h4 i span {
+  color: #807e7e;
+  margin-left: 5px;
+  font-weight: 500;
 }
 
 /*responsive part */
