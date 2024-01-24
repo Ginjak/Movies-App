@@ -1,42 +1,130 @@
 * {
-  margin: 0px;
+  margin: 30px;
   padding: 0;
+  margin: 0;
   box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
 }
 body {
-  margin: 30px;
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", Arial, sans-serif;
   background-image: -moz-radial-gradient();
 }
 
-#diverse-selector {
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+header {
+  position: relative;
+  min-height: 100vh;
+}
+header:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+h2 {
+  text-align: center;
+  font-size: 1.5em;
+  font-weight: 600;
+  letter-spacing: 0.06em;
 }
 
 h3 {
-  grid-column: span 1;
+  font-weight: 500;
 }
 
-.form-select {
-  grid-column: span 2;
-  justify-self: end;
+#search-input {
+  border: 1px solid #fff;
+  border-right: none;
+  color: #fff;
+}
+#search-input::placeholder {
+  color: #fff;
+}
+#search-btn {
+  border: 1px solid #fff;
 }
 
-#movies-thumb-cards {
-  display: grid;
-  columns: 3;
-  border: #777 solid;
-  border-radius: 10px;
+.title-span {
+  color: #ff8e99;
+}
+#movies-thumb-cards .card,
+.movie-wraper.card {
+  cursor: pointer;
+}
+
+#sort-card-title {
+  font-size: 14px;
+  font-weight: 700;
+}
+#movies .card-body {
+  color: black;
+}
+
+#rating i {
+  color: #ffb92a;
+  margin-right: 5px;
+  font-weight: bold;
+  font-size: 18px;
+}
+#remove-favorite {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  top: 5px;
+  left: calc(100% - 22px);
+  transition: color 0.2s ease-in;
+  color: #000;
+}
+#remove-favorite:hover {
+  transition: color 0.2s ease-in;
+  color: #dc3545;
+}
+#favorites-btn {
+  padding: 0;
+  text-align: center;
+  border: none;
+  background: none;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+}
+
+#movies .card-body {
+  color: black;
+}
+#favorites-btn i {
+  font-size: 24px;
+  width: 100%;
+  text-align: center;
+  color: #000;
+  transition: color 0.2s ease-in;
+}
+#favorites-btn:hover i {
+  color: #ffb92a;
+  transition: color 0.2s ease-in;
+}
+#youtube-trailer {
+  width: 100%;
+  max-height: 451px;
+}
+
+#movie-details {
+  background: #3f3d3d;
+}
+
+#movie-reviews-section {
+  background: #ecce93;
 }
 
 /*responsive part */
 @media screen and (max-width: 960px) {
   #movies-thumb-cards {
     display: inline;
-
     gap: 20px;
     align-items: center;
   }
@@ -47,5 +135,8 @@ h3 {
     display: inline;
     gap: 20px;
     align-items: center;
+  }
+  .movie-wraper img {
+    max-height: 150px;
   }
 }
