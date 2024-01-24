@@ -411,7 +411,7 @@ function movieReviews(movietitle) {
           for (var i = 0; i < 3; i++) {
             var authorRating = articles[i].author_details.rating;
             if (articles[i].author_details.rating == null) {
-              authorRating = "Not Rated";
+              authorRating = "Not rated";
             } else {
               authorRating = articles[i].author_details.rating;
             }
@@ -459,7 +459,7 @@ $("#movies").on("click", ".movie-wraper", function () {
       {
         scrollTop: $("#movie-details").offset().top,
       },
-      500
+      300
     );
     getMovie($(this).find("#sort-card-title").text().trim());
   }
