@@ -242,7 +242,7 @@ let searchButton = document.getElementById("search-btn");
 let result = document.getElementById("movie-details");
 
 // Add your YouTube Data API key here
-const youtubeKey = "AIzaSyAh-n-mfDEgD7pppdEFT1Mc8gflKClHvjw";
+const youtubeKey = "AIzaSyAULANoAdeRi1HNZ4FPiPdleKb6LQzo8Z4";
 
 // Function to fetch YouTube videos related to the movie
 let getYoutubeVideos = (movieName) => {
