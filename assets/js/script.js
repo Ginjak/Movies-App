@@ -375,12 +375,7 @@ function movieReviews(movietitle) {
     })
     .then((data) => {
       var movieId = data.results[0].id;
-      var allReviewsUrl =
-        "https://www.themoviedb.org/movie/" +
-        movieId +
-        "-" +
-        movietitle.split("+").join("-") +
-        "/reviews";
+
       var reviewUrl =
         "https://api.themoviedb.org/3/movie/" +
         movieId +
@@ -390,12 +385,10 @@ function movieReviews(movietitle) {
           return resp.json();
         })
         .then((data) => {
-          var totalReviewsCount = data.results.length;
           $("#movie-review").empty();
 
           var criticsName;
           var reviewDate;
-
           var UrlforReview;
           var content;
           var articles;
@@ -404,28 +397,43 @@ function movieReviews(movietitle) {
             `<a class="all-reviews btn btn-secondary text-uppercase " href="${allReviewsUrl}">See all reviews</a><span class=" text-muted fs-6"> (${totalReviewsCount})</span>`
           );
           $("#movie-review").prepend(seeAllReviews);
+
           for (var i = 0; i < 3; i++) {
+            var authorRating = articles[i].author_details.rating;
+            if (articles[i].author_details.rating == null) {
+              authorRating = 0;
+            } else {
+              authorRating = articles[i].author_details.rating;
+            }
+
             UrlforReview = articles[i].url;
             criticsName = articles[i].author;
-
+            updatedDate = dayjs(articles[i].updated_at).format("DD-MMM-YYYY");
             reviewDate = dayjs(articles[i].created_at).format("DD-MMM-YYYY");
             content = articles[i].content.slice(0, 80) + "...";
-            contentFull = articles[i].content;
             var reviewDiv = $("<div>");
+            reviewDiv.addClass("card");
+            var rating = $("<i>");
+            rating.addClass("fa-solid fa-star");
+            rating.text(authorRating);
             var authorHeading = $("<h4>");
             var reviewDateHeading = $("<h5>");
             var urltext = $("<a>").attr("href", UrlforReview);
             var contenttag = $("<p>");
+            var ratediv = $("<div>");
+            ratediv.append(rating);
             authorHeading.text(criticsName);
             reviewDateHeading.text(reviewDate);
-            // urltext.text("Read More");
+
+            urltext.text("Read More");
             contenttag.text(content);
+            reviewDiv.append(rating);
             reviewDiv.append(authorHeading);
             reviewDiv.append(reviewDateHeading);
-            reviewDiv.append(contentFull);
+            reviewDiv.append(content);
             reviewDiv.append("<br>");
             reviewDiv.append(urltext);
-            reviewDiv.append("<hr>");
+
             $("#movie-review").append(reviewDiv);
           }
         });
