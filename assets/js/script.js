@@ -276,16 +276,18 @@ let getMovie = (title) => {
       // If movie exists in database
       if (data.Response == "True") {
         result.innerHTML = `
-            <div class="info container-xxl">
+            <div class="info container-xxl py-5">
               <div class="row">
                 <div class="col-12 position-relative">
-                  <h2 class="text-start d-flex">${data.Title}</h2>
+                  <h2 class="text-md-start d-flex">${data.Title}</h2>
                   <button id="favorites-btn" class="d-flex flex-column" title="Add To Favorites"><i class="fa-regular fa-star"></i></button>
-                  <div class="meta">
-                      <span class="text-start">${data.Year}</span>
-                      <span class="text-start">${data.Rated}</span>
-                      <span class="text-start">${data.Runtime}</span>   
-                      <span class="text-start">${data.imdbRating}</span>
+                  <div class="meta mb-3">
+                      <span class="text-start">${data.Year} &bull;</span>
+                      <span class="text-start"> ${data.Rated} &bull;</span>
+                      <span class="text-start"> ${data.Runtime} &bull;</span>   
+                      <span class="text-start"> <i class="fa-solid fa-star" aria-hidden="true"></i>${
+                        data.imdbRating
+                      }</span>
                   </div>
                 </div>
                </div>   
@@ -297,16 +299,16 @@ let getMovie = (title) => {
                 </div>                   
                     
               <div class="row">
-              <div class="col-12 d-flex">
-                        <div class="px-2">${data.Genre.split(",").join(
-                          "</div><div class='px-2'>"
+              <div class="col-12 d-flex my-3">
+                        <div class="genre">${data.Genre.split(",").join(
+                          "</div><div class='genre'>"
                         )}</div>
               </div>
                         
               </div>
             </div>
             <div class="row">
-            <div class="col-12">           
+            <div class="col-12 about-movie">           
             <p>${data.Plot}</p>
             <p><span>Director(s): </span>${data.Director}</p>
             <p><span>Writer(s): </span>${data.Writer}</p>
@@ -399,10 +401,11 @@ function movieReviews(movietitle) {
           var articles;
           articles = data.results;
           var seeAllReviews = $(
-            `<a class="all-reviews btn btn-secondary text-uppercase " href="${allReviewsUrl}">See all reviews</a><span class=" text-muted fs-6"> (${totalReviewsCount})</span>`
+            `<div class="total-reviews-wraper mb-4 pt-2"><a class="all-reviews btn btn-danger position-relative text-uppercase" target="_blank" href="${allReviewsUrl}">See all reviews</a><span class=" review-count fs-6"> (${totalReviewsCount})</span></div>`
           );
           $("#movie-review").prepend(seeAllReviews);
-
+          var cardsWraper = $(`<div class="cards-wraper pb-5">`);
+          $("#movie-review").append(cardsWraper);
           for (var i = 0; i < 3; i++) {
             var authorRating = articles[i].author_details.rating;
             if (articles[i].author_details.rating == null) {
@@ -413,33 +416,32 @@ function movieReviews(movietitle) {
 
             UrlforReview = articles[i].url;
             criticsName = articles[i].author;
-            updatedDate = dayjs(articles[i].updated_at).format("DD-MMM-YYYY");
             reviewDate = dayjs(articles[i].created_at).format("DD-MMM-YYYY");
-            content = articles[i].content.slice(0, 80) + "...";
+            content = articles[i].content;
+
             var reviewDiv = $("<div>");
             reviewDiv.addClass("card");
             var rating = $("<i>");
             rating.addClass("fa-solid fa-star");
-            rating.text(authorRating);
             var authorHeading = $("<h4>");
+            var ratingText = $(`<span>${authorRating} -</span>`);
             var reviewDateHeading = $("<h5>");
             var urltext = $("<a>").attr("href", UrlforReview);
             var contenttag = $("<p>");
             var ratediv = $("<div>");
             ratediv.append(rating);
+            rating.append(ratingText);
             authorHeading.text(criticsName);
             reviewDateHeading.text(reviewDate);
-
-            urltext.text("Read More");
             contenttag.text(content);
-            reviewDiv.append(rating);
+            // reviewDiv.append(rating);
+            authorHeading.prepend(rating);
             reviewDiv.append(authorHeading);
             reviewDiv.append(reviewDateHeading);
             reviewDiv.append(content);
             reviewDiv.append("<br>");
             reviewDiv.append(urltext);
-
-            $("#movie-review").append(reviewDiv);
+            cardsWraper.append(reviewDiv);
           }
         });
     });
