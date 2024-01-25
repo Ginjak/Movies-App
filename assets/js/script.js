@@ -130,14 +130,14 @@ var displayFavoriteMovies = function (url, index) {
         ? `https://image.tmdb.org/t/p/w200/${posterPath}`
         : "/assets/img/No_image.png";
       var card =
-        $(`<div class="col" id="movies-thumb-cards-${index}" style="border: 1px, solid; border-radius: 10px;">
-              <div class="movie-wraper position-relative card row-cols-1" style="max-width:fit-content;">
+        $(`<div class="col card-group" id="movies-thumb-cards-${index}" style="border: 1px, solid; border-radius: 10px;">
+              <div class="movie-wraper position-relative card row-cols-1" style="max-width:100%;">
               <div id="remove-favorite"><i class="fa-solid fa-xmark"></i></div>
               <div class="row d-flex align-items-center g-0">
-              <div class="col-md-4 h-auto col-sm-4">
+              <div class="col-3 col-sm-2 col-md-4 h-auto">
                     <img src="${imgSrc}" class="img-fluid p-2" alt="Movie poster" />
                   </div>
-                  <div class="col-md-8 col-sm-8">
+                  <div class="col-8">
                     <div class="card-body">
                       
                       <h5 id="sort-card-title" class="card-title">${
