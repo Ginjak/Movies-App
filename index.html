@@ -17,9 +17,7 @@
     </style>
 
   </head>
-  <body>
-
-   
+<body>
     <header>
       <div class="container-xxl py-3 py-md-5 text-white position-relative">
         <div class="row d-flex justify-content-center mb-3 mb-md-5">
@@ -37,9 +35,7 @@
               <button
                 class="btn btn-danger text-uppercase fw-light"
                 type="button"
-                id="search-btn"
-                
-              >
+                id="search-btn">
                 Search
               </button>
             </div>
@@ -61,22 +57,21 @@
               <option value="4">My Favourites</option>
             </select>
           </div>
-        </div>
-     
+        </div>     
         <div id="movies" class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3"></div>
         <div id="clear-button" class="d-flex justify-content-end mt-3 d-none"  data-bs-toggle="modal" data-bs-target="#clearHistoryModal">
           <button id="clear-favorites" class="btn btn-danger">
             Clear Favorites
           </button>
-        </div>
-      </header>
-        <section id="movie-details" class="movieDetails text-white";>
-        </section>
-        <section id="movie-reviews-section">
-          <div id="movie-review" class="container-xxl"></div>
-        </section>
-        </div>
       </div>
+    </header>
+    <!-- Movie details section -->
+    <section id="movie-details" class="movieDetails text-white";>
+    </section>
+    <!-- Movie reviews section -->
+    <section id="movie-reviews-section">
+      <div id="movie-review" class="container-xxl"></div>
+    </section>
     
       <!-- Modals -->
       <div class="modal fade" id="clearHistoryModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -110,10 +105,8 @@
     ></script>
     <!-- Day JS -->
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
-
-  <!-- Custom JS -->
-  <script src="./assets/js/script.js"></script>
-
+    <!-- Custom JS -->
+    <script src="./assets/js/script.js"></script>
 </body>
 
 </html>
