@@ -6,6 +6,7 @@ var movieCards = $("#movies");
 var movieInfo = $("#movie-info");
 var clearFavoriteHistory = $("#clear-button");
 var currentDay = dayjs().format("YYYY-MM-DD");
+
 /* -----------------------
         Functions
    ----------------------- */
@@ -99,6 +100,8 @@ function fetchMovies() {
     movieSortTitle.text("Favorites");
   }
 }
+
+// Fetch fvorite movies from local storage
 var fetchFavoriteMovies = function () {
   movieCards.empty();
   var apiKey = "bdc89408c9f3fc4ec6ef3b8781672df0";
@@ -119,6 +122,7 @@ var fetchFavoriteMovies = function () {
   }
 };
 
+// Display favorite movies in card style (hero section)
 var displayFavoriteMovies = function (url, index) {
   fetch(url)
     .then((resp) => {
@@ -158,7 +162,7 @@ var displayFavoriteMovies = function (url, index) {
             </div>`);
 
       movieCards.append(card);
-
+      // Click even to remove a movie from a local storage and update local storage
       $(`#movies-thumb-cards-${index}`).on(
         "click",
         "#remove-favorite",
@@ -191,51 +195,9 @@ var displayFavoriteMovies = function (url, index) {
 };
 
 fetchMovies();
-// On Search button click fetch data about movies from OMDB
-searchBtn.on("click", function () {
-  $("#movie-details").empty();
-  $("#movie-review").empty();
-  if (searchInput.val() !== "") {
-    getMovie(searchInput.val());
-    $("html, body").animate(
-      {
-        scrollTop: $("#movie-details").offset().top,
-      },
-      300
-    );
-  }
-});
-
-movieSortOptions.on("change", function () {
-  fetchMovies();
-  $(clearFavoriteHistory).addClass("d-none");
-  $("#movie-details").empty();
-  $("#movie-review").empty();
-  // Changed cursor to not-allowed when Future realeases selected to avoid missing data errors
-  setTimeout(function () {
-    if (movieSortOptions.val() === "3") {
-      $("#movies-thumb-cards .card").css("cursor", "not-allowed");
-    }
-  }, 500);
-
-  if (
-    movieSortOptions.val() === "4" &&
-    localStorage.getItem("FavoriteMovies") !== null &&
-    localStorage.getItem("FavoriteMovies").length > 0
-  ) {
-    $(clearFavoriteHistory).removeClass("d-none");
-  }
-  if (
-    movieSortOptions.val() === "4" &&
-    localStorage.getItem("FavoriteMovies") !== null &&
-    localStorage.getItem("FavoriteMovies").length === 2
-  ) {
-    $(clearFavoriteHistory).addClass("d-none");
-  }
-});
 
 /* ---------------
-Tomaz code
+    Tomaz code
 ---------------- */
 
 // Initial References
@@ -268,7 +230,7 @@ let getYoutubeVideos = (movieName) => {
   });
 };
 
-// Function to fetch data from API
+// Function to fetch data from API (OMDB)
 const key = "2bd71b72";
 let getMovie = (title) => {
   let url = `https://www.omdbapi.com/?t=${title}&apikey=${key}`;
@@ -321,7 +283,7 @@ let getMovie = (title) => {
           `;
 
         movieReviews(data.Title.split(" ").join("+"));
-
+        // Add youtube movie trailer to iframe
         getYoutubeVideos(data.Title)
           .then((videoUrl) => {
             // Append the YouTube video URL to the 'test' paragraph
@@ -334,7 +296,7 @@ let getMovie = (title) => {
             console.error(error);
           });
       }
-
+      // Add movie to favorites and change color of favorites button
       $("#movie-details")
         .off("click", "#favorites-btn")
         .on("click", "#favorites-btn", function () {
@@ -354,6 +316,7 @@ let getMovie = (title) => {
         });
 
       var moviesFromLS = localStorage.getItem("FavoriteMovies");
+      // On button hover title shows up if movie is already in favorites or not
       if (moviesFromLS) {
         if (moviesFromLS.includes(data.Title.trim())) {
           $("#favorites-btn i").css("color", "#ffb92a");
@@ -363,15 +326,16 @@ let getMovie = (title) => {
     });
 };
 
+// Query url for movie reviews
 var querUrl =
   "https://api.nytimes.com/svc/search/v2/articlesearch.json?q=rambo&fq=section_name:Movies&type_of_material:Review&sort=newest&page=0&api-key=v7NMMpYkjMpqpGFtYZymGBQiWFEMTMEb";
 
+// Fetch movie reviews
 function movieReviews(movietitle) {
   var querUrl =
     "https://api.themoviedb.org/3/search/movie?query=" +
     movietitle +
     "&api_key=c9496f893f42d58d46a50e1820b050e8";
-  //'https://api.themoviedb.org/3/movie/1771?api_key=c9496f893f42d58d46a50e1820b050e8'
 
   fetch(querUrl)
     .then((resp) => {
@@ -402,10 +366,12 @@ function movieReviews(movietitle) {
           var content;
           var articles;
           articles = data.results;
+          // Display all reviews button
           var seeAllReviews = $(
             `<div class="total-reviews-wraper mb-4 pt-2"><a class="all-reviews btn btn-danger position-relative text-uppercase" target="_blank" href="${allReviewsUrl}">See all reviews</a><span class=" review-count fs-6"> (${totalReviewsCount})</span></div>`
           );
           $("#movie-review").prepend(seeAllReviews);
+          // Display individual reviews, max 3 per movie
           var cardsWraper = $(`<div class="cards-wraper pb-5">`);
           $("#movie-review").append(cardsWraper);
           for (var i = 0; i < 3; i++) {
@@ -449,6 +415,55 @@ function movieReviews(movietitle) {
     });
 }
 
+/* -----------------------
+        Events
+   ----------------------- */
+
+// Depending on select option change cursor to "not-allowed" and add/remove class for clear history button
+movieSortOptions.on("change", function () {
+  fetchMovies();
+  $(clearFavoriteHistory).addClass("d-none");
+  $("#movie-details").empty();
+  $("#movie-review").empty();
+
+  setTimeout(function () {
+    if (movieSortOptions.val() === "3") {
+      $("#movies-thumb-cards .card").css("cursor", "not-allowed");
+    }
+  }, 500);
+
+  if (
+    movieSortOptions.val() === "4" &&
+    localStorage.getItem("FavoriteMovies") !== null &&
+    localStorage.getItem("FavoriteMovies").length > 0
+  ) {
+    $(clearFavoriteHistory).removeClass("d-none");
+  }
+  if (
+    movieSortOptions.val() === "4" &&
+    localStorage.getItem("FavoriteMovies") !== null &&
+    localStorage.getItem("FavoriteMovies").length === 2
+  ) {
+    $(clearFavoriteHistory).addClass("d-none");
+  }
+});
+
+// On Search button click fetch data about movies from OMDB
+searchBtn.on("click", function () {
+  $("#movie-details").empty();
+  $("#movie-review").empty();
+  if (searchInput.val() !== "") {
+    getMovie(searchInput.val());
+    $("html, body").animate(
+      {
+        scrollTop: $("#movie-details").offset().top,
+      },
+      300
+    );
+  }
+});
+
+// Added scroll down animation with 0.5s delay to scroll down to section with movie details
 $("#movies").on("click", ".movie-wraper", function () {
   if (
     movieSortOptions.val() === "1" ||
@@ -459,12 +474,13 @@ $("#movies").on("click", ".movie-wraper", function () {
       {
         scrollTop: $("#movie-details").offset().top,
       },
-      300
+      500
     );
     getMovie($(this).find("#sort-card-title").text().trim());
   }
 });
 
+// Clear local storage
 $("#clear-full-history").on("click", function () {
   localStorage.clear();
   clearFavoriteHistory.addClass("d-none");
